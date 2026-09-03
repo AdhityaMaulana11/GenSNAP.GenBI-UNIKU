@@ -10,7 +10,7 @@
 
 ---
 
-## 🌟 Tentan GenSNAP
+## 🌟 Tentang GenSNAP
 
 **GenSNAP** adalah aplikasi photobooth web modern berbasis **Next.js (App Router)** dan **HTML5 Canvas API** yang dirancang untuk memberikan pengalaman fotografi interaktif, cepat, dan berkesan. 
 
@@ -23,25 +23,35 @@ Aplikasi ini disesuaikan khusus untuk mendukung kegiatan **Champions Explorer** 
 
 ### 1. 📸 Standard Photo Booth Mode
 - **Multi-Shot Sequence**: Pengambilan foto beruntun otomatis dengan countdown timer (3s, 5s, 10s).
-- **Interactive Strip Preview**: Pratinjau *real-time* posisi foto pada template frame (responsif di mobile & desktop).
+- **Interactive Strip Preview**: Pratinjau *real-time* posisi foto pada template frame (responsif di mobile, tablet, dan desktop).
 - **Single Photo Retake**: Pengguna dapat mengulangi foto pada slot tertentu tanpa mengulang dari awal.
-- **Kamera Controls**: Dukungan *camera flip* (depan/belakang) dan *screen flash effect*.
+- **Kamera Controls**: Dukungan *camera flip* (depan/belakang) dan pengatur flash.
 
-### 2. ✨ Apple-Style Live Photo Mode
+### 2. 💡 MacBook-Style Studio Ring Light & Hardware Torch
+- **MacBook Studio Light Frame**: Tabung cahaya stadium keliling layar (*stadium neon tube*) berbasis SVG dengan pendaran *multi-layer Gaussian blur diffusion*.
+- **High-Lumen Physical Screen Lighting**: Layar memancarkan pencahayaan fisik intens (*screen floodlight*) untuk menerangi wajah di ruangan gelap.
+- **Interactive Ring Light Controller**:
+  - 🎚️ **Slider Kecerahan (*Brightness*)**: Mengatur intensitas cahaya dari 20% hingga 100%.
+  - 🎨 **5 Preset Temperatur & Warna**: *Cool White (6500K)*, *Warm Natural (4500K)*, *Golden Hour (3200K)*, *Soft Rosy*, *Cyber Blue*, serta *Custom Hex Color Picker*.
+  - 🗕 **Minimizable Widget**: Panel kontrol dapat diminimalkan ke sudut layar agar tidak mengganggu pandangan saat berpose.
+- **Live Preview & Capture Lighting Boost**: Peningkatan eksposur secara *real-time* pada tampilan kamera dan hasil jepretan foto.
+- **Hardware Torch (Kamera Belakang)**: Integrasi WebRTC Hardware Torch API untuk menyalakan lampu flash LED fisik pada perangkat HP dan tablet.
+
+### 3. ✨ Apple-Style Live Photo Mode
 - **Framed Motion Clips**: Mengabadikan video motion (1.8s) + snapshot foto beresolusi tinggi untuk setiap slot frame.
 - **Interactive Motion Playback**: Putar video motion per-slot atau klik *"Putar Semua Live Motion"* sekaligus di halaman hasil.
 - **Auto Video Mirroring**: Penyesuaian *mirroring* otomatis untuk kamera depan pada rekaman video motion.
 
-### 3. 🎥 Video Booth Mode
+### 4. 🎥 Video Booth Mode
 - **HD Video Recording**: Perekaman video langsung hingga 15 detik dengan indikator timer animasi.
 - **Instant Playback & Download**: Pratinjau langsung rekaman video dengan opsi unduh format MP4.
 
-### 4. 🎨 Canvas Rendering & Multi-Format Export
+### 5. 🎨 Canvas Rendering & Multi-Format Export
 - **Client-Side Canvas Composition**: Penggabungan foto dan artwork frame PNG secara *lossless* tanpa *server overload*.
 - **Multi-Format Export**: Unduh hasil akhir dalam format **PNG**, **JPG (Background Solid)**, atau **MP4 Video Clips**.
 - **Web Share Integration**: Bagikan hasil photostrip langsung ke media sosial melalui native Web Share API.
 
-### 5. 📱 Neo-Brutalist Responsive UI Design
+### 6. 📱 Neo-Brutalist Responsive UI Design
 - Desain visual retro-modern berkarakter (*bold border*, *hard shadow*, *curated color palette*).
 - Responsif di seluruh ukuran layar (Smartphone, Tablet, Desktop).
 
@@ -103,13 +113,17 @@ gensnap-by-genbi-uniku/
 │   ├── layout.tsx              # Root layout & Metadata
 │   └── page.tsx                # Landing Page (Champions Explorer Edition)
 ├── components/                 # Reusable UI Components
-│   ├── camera/                 # Camera controls, viewfinder, countdown, strip preview
+│   ├── camera/                 # Camera controls, viewfinder, countdown, strip preview, ring light
+│   │   ├── camera-controls.tsx # Flash, flip, timer controls
+│   │   ├── camera-viewfinder.tsx # Camera stream & live lighting boost
+│   │   ├── ring-light.tsx      # MacBook-style studio ring light & floating controller
+│   │   └── strip-preview.tsx   # Live frame strip preview component
 │   ├── frames/                 # Frame card components
 │   ├── layout/                 # Sticky Header, Booth Header & Footer
 │   ├── live-photo/             # Live photo result page component
 │   └── ui/                     # Reusable buttons, error states, doodles
 ├── lib/                        # Utility & Core Logic
-│   ├── camera/                 # Camera manager & photo capture helper
+│   ├── camera/                 # Camera manager, torch control & photo capture helper
 │   ├── canvas/                 # Canvas renderer (photostrip composer)
 │   ├── export/                 # Download (PNG/JPG) & share manager
 │   ├── frames/                 # Built-in frame definitions
@@ -132,5 +146,5 @@ gensnap-by-genbi-uniku/
 
 ## 🎨 Developed By
 
-Brought to you with ❤️ by **[Undergrowth.studio](https://undergrowth.studio)**  
+Brought to you by **[Undergrowth.studio](https://undergrowth.studio)**  
 *© 2026 GenSNAP • GenBI UNIKU. All rights reserved.*
