@@ -13,6 +13,7 @@ import { CountdownOverlay } from '@/components/camera/countdown-overlay';
 import { StripPreview } from '@/components/camera/strip-preview';
 import { BoothHeader } from '@/components/layout/booth-header';
 import { LivePhotoResultPage } from '@/components/live-photo/live-photo-result-page';
+import { RingLightOverlay, RingLightControls, RingLightConfig } from '@/components/camera/ring-light';
 import { Button } from '@/components/ui/button';
 import { ErrorState, ErrorType } from '@/components/ui/error-state';
 import { usePhotoboothSession } from '@/lib/session/session-context';
@@ -40,6 +41,13 @@ export default function LivePhotoBoothPage() {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [errorType, setErrorType] = useState<ErrorType | null>(null);
 
+  // Screen Ring Light Configuration for front camera
+  const [ringLightConfig, setRingLightConfig] = useState<RingLightConfig>({
+    enabled: false,
+    brightness: 80,
+    color: '#ffffff',
+  });
+
   const totalSlots = currentFrame.photoCount || 1;
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
   const [capturedSlots, setCapturedSlots] = useState<LivePhotoSlot[]>([]);
@@ -65,6 +73,11 @@ export default function LivePhotoBoothPage() {
           videoRef.current.srcObject = stream;
           setIsCameraReady(true);
         }
+
+        // If rear camera and flash was enabled, activate hardware torch
+        if (facing === 'environment' && flashEnabled) {
+          await cameraManager.setTorch(true);
+        }
       } catch (err: unknown) {
         if (!isMounted) return;
         const error = err as Error;
@@ -83,7 +96,43 @@ export default function LivePhotoBoothPage() {
   }, [facing, cameraKey, stage]);
 
   // ── Handlers ────────────────────────────────────────────────────────────────
-  const handleFlipCamera = () => setFacing((prev) => (prev === 'user' ? 'environment' : 'user'));
+  const handleFlipCamera = async () => {
+    setIsCameraReady(false);
+    setErrorType(null);
+    const nextFacing = facing === 'user' ? 'environment' : 'user';
+
+    // Turn off torch when leaving rear camera
+    if (cameraManagerRef.current && facing === 'environment') {
+      await cameraManagerRef.current.setTorch(false);
+    }
+
+    setFacing(nextFacing);
+
+    // Update ring light state based on facing
+    if (nextFacing === 'user' && flashEnabled) {
+      setRingLightConfig((prev) => ({ ...prev, enabled: true }));
+    } else {
+      setRingLightConfig((prev) => ({ ...prev, enabled: false }));
+    }
+  };
+
+  const handleToggleFlash = async () => {
+    const nextState = !flashEnabled;
+    setFlashEnabled(nextState);
+
+    if (facing === 'user') {
+      // Front camera: toggle screen ring light
+      setRingLightConfig((prev) => ({
+        ...prev,
+        enabled: nextState,
+      }));
+    } else {
+      // Rear camera: toggle hardware torch if supported
+      if (cameraManagerRef.current) {
+        await cameraManagerRef.current.setTorch(nextState);
+      }
+    }
+  };
 
   const restartCamera = () => setCameraKey((k) => k + 1);
 
@@ -357,8 +406,13 @@ export default function LivePhotoBoothPage() {
   }
 
   // ── Stage: CAPTURING ────────────────────────────────────────────────────────
+  const isRingLightActive = facing === 'user' && ringLightConfig.enabled;
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative overflow-x-hidden select-none bg-dot-pattern-blue">
+      {/* Screen Ring Light Ambient Edge Illumination */}
+      <RingLightOverlay config={ringLightConfig} />
+
       <BoothHeader
         backHref="/frames"
         onBack={() => retakingSlotIndex !== null && handleCancelRetakeSlot()}
@@ -370,7 +424,7 @@ export default function LivePhotoBoothPage() {
         }
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 md:px-8 py-3 sm:py-6 md:py-8 flex flex-col items-center justify-center">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 md:px-8 py-3 sm:py-6 md:py-8 flex flex-col items-center justify-center relative z-20">
         <div className="w-full flex flex-col md:flex-row items-center md:items-start lg:items-center justify-center gap-3 sm:gap-6 lg:gap-8">
 
           {/* Controls: order-2 on mobile (below viewfinder), order-1 on desktop */}
@@ -380,14 +434,25 @@ export default function LivePhotoBoothPage() {
               onSelectCountdown={(sec: CountdownDuration) => setCountdown(sec)}
               onFlipCamera={handleFlipCamera}
               flashEnabled={flashEnabled}
-              onToggleFlash={() => setFlashEnabled(!flashEnabled)}
+              onToggleFlash={handleToggleFlash}
+              facing={facing}
               disabled={isRecording}
             />
           </div>
 
           {/* Viewfinder */}
           <div className="order-1 md:order-2 flex flex-col items-center w-full max-w-[440px] lg:max-w-[560px] xl:max-w-2xl">
-            <div className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-black border-3 sm:border-4 border-[#00327d] shadow-hard-blue">
+            <div
+              className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-black border-3 sm:border-4 shadow-hard-blue transition-all duration-300"
+              style={{
+                borderColor: isRingLightActive ? ringLightConfig.color : '#00327d',
+                boxShadow: isRingLightActive
+                  ? `0 0 ${Math.round(ringLightConfig.brightness * 0.4)}px ${Math.round(
+                      ringLightConfig.brightness * 0.15
+                    )}px ${ringLightConfig.color}, 4px 4px 0px 0px #00327d`
+                  : undefined,
+              }}
+            >
               <video
                 ref={videoRef}
                 autoPlay
@@ -396,7 +461,10 @@ export default function LivePhotoBoothPage() {
                 className={`w-full h-full object-cover ${facing === 'user' ? 'scale-x-[-1]' : ''}`}
               />
               {flashTriggered && (
-                <div className="absolute inset-0 bg-white z-40 animate-out fade-out duration-300 pointer-events-none" />
+                <div
+                  className="absolute inset-0 z-40 animate-out fade-out duration-300 pointer-events-none"
+                  style={{ backgroundColor: ringLightConfig.color || '#ffffff' }}
+                />
               )}
 
               {/* Status badge */}
@@ -476,6 +544,18 @@ export default function LivePhotoBoothPage() {
           </div>
         </div>
       </main>
+
+      {/* Floating Screen Ring Light Controller (Front Camera) */}
+      {facing === 'user' && ringLightConfig.enabled && (
+        <RingLightControls
+          config={ringLightConfig}
+          onChange={setRingLightConfig}
+          onClose={() => {
+            setRingLightConfig((prev) => ({ ...prev, enabled: false }));
+            setFlashEnabled(false);
+          }}
+        />
+      )}
     </div>
   );
 }

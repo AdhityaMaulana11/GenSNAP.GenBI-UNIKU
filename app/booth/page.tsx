@@ -11,6 +11,7 @@ import { CaptureButton } from '@/components/camera/capture-button';
 import { StripPreview } from '@/components/camera/strip-preview';
 import { CountdownOverlay } from '@/components/camera/countdown-overlay';
 import { BoothHeader } from '@/components/layout/booth-header';
+import { RingLightOverlay, RingLightControls, RingLightConfig } from '@/components/camera/ring-light';
 import { ArrowDoodle } from '@/components/ui/doodles';
 import { ErrorState, ErrorType } from '@/components/ui/error-state';
 import { usePhotoboothSession } from '@/lib/session/session-context';
@@ -38,6 +39,13 @@ export default function BoothCameraPage() {
   const [errorType, setErrorType] = useState<ErrorType | null>(null);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
 
+  // Screen Ring Light Configuration for front camera
+  const [ringLightConfig, setRingLightConfig] = useState<RingLightConfig>({
+    enabled: false,
+    brightness: 80,
+    color: '#ffffff',
+  });
+
   // Initialize camera
   useEffect(() => {
     let isMounted = true;
@@ -59,6 +67,11 @@ export default function BoothCameraPage() {
               setIsCameraReady(true);
             }
           };
+        }
+
+        // If rear camera and flash was enabled, activate hardware torch
+        if (facing === 'environment' && flashEnabled) {
+          await cameraManagerRef.current.setTorch(true);
         }
       } catch (err: unknown) {
         if (!isMounted) return;
@@ -86,13 +99,46 @@ export default function BoothCameraPage() {
   }, [facing]);
 
   // Flip front/rear camera
-  const handleFlipCamera = () => {
+  const handleFlipCamera = async () => {
     setIsCameraReady(false);
     setErrorType(null);
-    setFacing((prev) => (prev === 'user' ? 'environment' : 'user'));
+    const nextFacing = facing === 'user' ? 'environment' : 'user';
+
+    // Turn off torch when leaving rear camera
+    if (cameraManagerRef.current && facing === 'environment') {
+      await cameraManagerRef.current.setTorch(false);
+    }
+
+    setFacing(nextFacing);
+
+    // Update ring light state based on facing
+    if (nextFacing === 'user' && flashEnabled) {
+      setRingLightConfig((prev) => ({ ...prev, enabled: true }));
+    } else {
+      setRingLightConfig((prev) => ({ ...prev, enabled: false }));
+    }
   };
 
-  // Trigger flash effect
+  // Toggle flash (Ring Light on front camera, Hardware Torch on rear camera)
+  const handleToggleFlash = async () => {
+    const nextState = !flashEnabled;
+    setFlashEnabled(nextState);
+
+    if (facing === 'user') {
+      // Front camera: toggle screen ring light
+      setRingLightConfig((prev) => ({
+        ...prev,
+        enabled: nextState,
+      }));
+    } else {
+      // Rear camera: toggle hardware torch if supported
+      if (cameraManagerRef.current) {
+        await cameraManagerRef.current.setTorch(nextState);
+      }
+    }
+  };
+
+  // Trigger flash pulse effect during snap
   const triggerFlash = () => {
     if (flashEnabled) {
       setFlashTriggered(true);
@@ -193,7 +239,10 @@ export default function BoothCameraPage() {
   const capturedCount = state.photos.filter((p) => p !== null).length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] bg-dot-pattern-blue select-none overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#fcf9f8] bg-dot-pattern-blue select-none overflow-x-hidden relative">
+      {/* Screen Ring Light Ambient Edge Illumination */}
+      <RingLightOverlay config={ringLightConfig} />
+
       <BoothHeader
         backHref="/frames"
         onBack={() => { if (state.isRetaking) cancelRetake(); }}
@@ -206,7 +255,7 @@ export default function BoothCameraPage() {
       />
 
       {/* Main Studio Viewport */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 flex flex-col items-center justify-center">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 flex flex-col items-center justify-center relative z-20">
         <div className="w-full flex flex-col md:flex-row items-center md:items-start lg:items-center justify-center gap-4 sm:gap-6 lg:gap-8">
           {/* Left Controls Panel */}
           <div className="order-2 md:order-1 flex md:flex-col items-center justify-center shrink-0">
@@ -215,7 +264,8 @@ export default function BoothCameraPage() {
               onSelectCountdown={(sec: CountdownDuration) => setCountdown(sec)}
               onFlipCamera={handleFlipCamera}
               flashEnabled={flashEnabled}
-              onToggleFlash={() => setFlashEnabled(!flashEnabled)}
+              onToggleFlash={handleToggleFlash}
+              facing={facing}
               disabled={isCapturing}
             />
           </div>
@@ -226,6 +276,7 @@ export default function BoothCameraPage() {
               ref={videoRef}
               facing={facing}
               flashTriggered={flashTriggered}
+              ringLightConfig={ringLightConfig}
             >
               <CountdownOverlay currentCount={countdownValue} />
             </CameraViewfinder>
@@ -257,6 +308,18 @@ export default function BoothCameraPage() {
           </div>
         </div>
       </main>
+
+      {/* Floating Screen Ring Light Controller (Front Camera) */}
+      {facing === 'user' && ringLightConfig.enabled && (
+        <RingLightControls
+          config={ringLightConfig}
+          onChange={setRingLightConfig}
+          onClose={() => {
+            setRingLightConfig((prev) => ({ ...prev, enabled: false }));
+            setFlashEnabled(false);
+          }}
+        />
+      )}
     </div>
   );
 }

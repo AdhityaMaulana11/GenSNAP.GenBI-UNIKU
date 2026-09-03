@@ -63,8 +63,37 @@ export class CameraManager {
     return this.stream;
   }
 
+  hasTorchSupport(): boolean {
+    if (!this.stream) return false;
+    const track = this.stream.getVideoTracks()[0];
+    if (!track || typeof track.getCapabilities !== 'function') return false;
+    const capabilities = track.getCapabilities() as any;
+    return Boolean(capabilities && capabilities.torch);
+  }
+
+  async setTorch(enabled: boolean): Promise<boolean> {
+    if (!this.stream) return false;
+    const track = this.stream.getVideoTracks()[0];
+    if (!track) return false;
+
+    try {
+      const capabilities = (typeof track.getCapabilities === 'function' ? track.getCapabilities() : {}) as any;
+      if (capabilities && 'torch' in capabilities) {
+        await track.applyConstraints({
+          advanced: [{ torch: enabled } as any],
+        });
+        return true;
+      }
+    } catch (err) {
+      console.warn('Hardware torch error/unsupported:', err);
+    }
+    return false;
+  }
+
   stopCamera(): void {
     if (this.stream) {
+      // Turn off torch if any
+      this.setTorch(false).catch(() => {});
       this.stream.getTracks().forEach((track) => {
         track.stop();
       });
