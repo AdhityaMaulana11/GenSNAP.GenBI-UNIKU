@@ -152,7 +152,14 @@ export default function BoothCameraPage() {
 
     triggerFlash();
     try {
-      const photo = await captureVideoFrame(videoRef.current, facing === 'user');
+      const boost =
+        facing === 'user' && ringLightConfig.enabled
+          ? ringLightConfig.brightness / 100
+          : flashEnabled
+          ? 0.7
+          : 0;
+
+      const photo = await captureVideoFrame(videoRef.current, facing === 'user', boost);
       if (isRetake) {
         replacePhoto(targetIndex, photo);
         router.push('/preview');

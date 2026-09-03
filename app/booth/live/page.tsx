@@ -158,10 +158,17 @@ export default function LivePhotoBoothPage() {
     recorder.startRecording(stream);
 
     let stillSnapshot: { blob: Blob; dataUrl: string } | null = null;
+    const boost =
+      capturingFacing === 'user' && ringLightConfig.enabled
+        ? ringLightConfig.brightness / 100
+        : flashEnabled
+        ? 0.7
+        : 0;
+
     setTimeout(async () => {
       try {
         if (videoRef.current) {
-          stillSnapshot = await captureVideoFrame(videoRef.current, capturingFacing === 'user');
+          stillSnapshot = await captureVideoFrame(videoRef.current, capturingFacing === 'user', boost);
         }
       } catch (err) {
         console.error('Still capture error', err);
@@ -172,7 +179,7 @@ export default function LivePhotoBoothPage() {
       try {
         const recordResult = await recorder.stopRecording();
         if (!stillSnapshot && videoRef.current) {
-          stillSnapshot = await captureVideoFrame(videoRef.current, capturingFacing === 'user');
+          stillSnapshot = await captureVideoFrame(videoRef.current, capturingFacing === 'user', boost);
         }
         if (!stillSnapshot) return;
 
@@ -443,13 +450,11 @@ export default function LivePhotoBoothPage() {
           {/* Viewfinder */}
           <div className="order-1 md:order-2 flex flex-col items-center w-full max-w-[440px] lg:max-w-[560px] xl:max-w-2xl">
             <div
-              className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-black border-3 sm:border-4 shadow-hard-blue transition-all duration-300"
+              className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-black border-3 sm:border-4 shadow-hard-blue transition-all duration-300 z-10"
               style={{
                 borderColor: isRingLightActive ? ringLightConfig.color : '#00327d',
                 boxShadow: isRingLightActive
-                  ? `0 0 ${Math.round(ringLightConfig.brightness * 0.4)}px ${Math.round(
-                      ringLightConfig.brightness * 0.15
-                    )}px ${ringLightConfig.color}, 4px 4px 0px 0px #00327d`
+                  ? `0 0 24px ${ringLightConfig.color}80, 4px 4px 0px 0px #00327d`
                   : undefined,
               }}
             >
@@ -486,6 +491,17 @@ export default function LivePhotoBoothPage() {
                   </>
                 )}
               </div>
+
+              {/* Active Ring Light Status Pill */}
+              {isRingLightActive && (
+                <div
+                  className="absolute top-2.5 sm:top-4 right-2.5 sm:right-4 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-mono font-extrabold border-2 border-[#00327d] shadow-sm select-none"
+                  style={{ backgroundColor: ringLightConfig.color, color: '#00327d' }}
+                >
+                  <Sparkles className="w-3 h-3 fill-current animate-spin" />
+                  <span>RING {ringLightConfig.brightness}%</span>
+                </div>
+              )}
 
               <CountdownOverlay currentCount={countdownValue} />
             </div>
