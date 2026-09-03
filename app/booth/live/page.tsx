@@ -463,7 +463,12 @@ export default function LivePhotoBoothPage() {
                 autoPlay
                 playsInline
                 muted
-                className={`w-full h-full object-cover ${facing === 'user' ? 'scale-x-[-1]' : ''}`}
+                className={`w-full h-full object-cover transition-all duration-200 ${facing === 'user' ? 'scale-x-[-1]' : ''}`}
+                style={{
+                  filter: isRingLightActive
+                    ? `brightness(${1 + (ringLightConfig.brightness / 100) * 0.25}) contrast(${1 + (ringLightConfig.brightness / 100) * 0.08})`
+                    : 'none',
+                }}
               />
               {flashTriggered && (
                 <div

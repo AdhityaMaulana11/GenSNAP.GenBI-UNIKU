@@ -60,15 +60,20 @@ export const CameraViewfinder = forwardRef<HTMLVideoElement, CameraViewfinderPro
           <CornerDoodle size={32} />
         </div>
 
-        {/* Live HTML5 Video Element */}
+        {/* Live HTML5 Video Element with Real-Time Lighting Boost */}
         <video
           ref={ref}
           autoPlay
           playsInline
           muted
-          className={`w-full h-full object-cover transition-transform duration-200 ${
+          className={`w-full h-full object-cover transition-all duration-200 ${
             isFrontCamera ? 'scale-x-[-1]' : 'scale-x-100'
           }`}
+          style={{
+            filter: isRingLightActive
+              ? `brightness(${1 + (brightness / 100) * 0.25}) contrast(${1 + (brightness / 100) * 0.08})`
+              : 'none',
+          }}
         />
 
         {/* Screen Flash Burst Overlay on Snapshot */}

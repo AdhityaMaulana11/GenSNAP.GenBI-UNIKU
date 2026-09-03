@@ -22,9 +22,10 @@ interface RingLightOverlayProps {
 }
 
 /**
- * Exact MacBook / macOS Studio Light Recreation:
- * Renders an unbroken, perfectly rounded stadium neon light tube with multi-layered
- * Gaussian blur diffusion and a solid high-lumen white/tinted core framing the entire screen.
+ * Maximum-Lumen MacBook Studio Light:
+ * Turns the device screen into a powerful physical ring light / softbox lamp.
+ * Emits massive physical lumens onto the user's face in dark environments with
+ * a thick stadium neon light tube and high-intensity ambient floodlight.
  */
 export function RingLightOverlay({ config }: RingLightOverlayProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -47,33 +48,44 @@ export function RingLightOverlay({ config }: RingLightOverlayProps) {
   const isDesktop = dimensions.width >= 768;
   const brightnessNorm = Math.max(0.2, config.brightness / 100);
 
-  // Exact macOS Studio Light Geometry:
-  // Margin from bezel: 20px on mobile, 34px on desktop/laptop
-  const margin = isDesktop ? 34 : 20;
+  // Geometry:
+  const margin = isDesktop ? 28 : 16;
   const rectX = margin;
   const rectY = margin;
   const rectWidth = Math.max(100, dimensions.width - margin * 2);
   const rectHeight = Math.max(100, dimensions.height - margin * 2);
 
-  // Large smooth stadium corner radius (concentric inner & outer curves)
-  const cornerRadius = isDesktop ? 84 : 52;
+  // Large smooth stadium corner radius
+  const cornerRadius = isDesktop ? 80 : 48;
 
-  // Thick physical light tube width scaled by brightness slider
+  // Maximum Physical Light Tube Width (scaled by brightness: up to 80px on desktop)
   const tubeWidth = isDesktop
-    ? Math.round(44 + brightnessNorm * 26) // 50px - 70px on desktop
-    : Math.round(28 + brightnessNorm * 18); // 32px - 46px on mobile
+    ? Math.round(48 + brightnessNorm * 32) // 54px - 80px thick
+    : Math.round(30 + brightnessNorm * 22); // 34px - 52px thick
+
+  // High-intensity screen floodlight opacity (0.25 to 0.85 solid light emission)
+  const screenFloodOpacity = Math.min(0.85, 0.15 + brightnessNorm * 0.70);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 select-none overflow-hidden transition-opacity duration-300">
-      {/* Background ambient contrast wash (darkens screen outside ring slightly like macOS) */}
+    <div className="fixed inset-0 pointer-events-none z-50 select-none overflow-hidden transition-all duration-300">
+      {/* 1. Maximum-Lumen Screen Floodlight (physically lights up face & room) */}
       <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+        className="absolute inset-0 pointer-events-none transition-all duration-300"
         style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.22)',
+          backgroundColor: config.color,
+          opacity: screenFloodOpacity,
         }}
       />
 
-      {/* SVG-Rendered Authentic MacBook Stadium Studio Light */}
+      {/* 2. Soft Edge Luminous Diffusion Radiance */}
+      <div
+        className="absolute inset-0 pointer-events-none transition-all duration-300"
+        style={{
+          boxShadow: `inset 0 0 ${Math.round(120 * brightnessNorm)}px ${Math.round(50 * brightnessNorm)}px ${config.color}`,
+        }}
+      />
+
+      {/* 3. SVG-Rendered Ultra-Bright MacBook Stadium Tube */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
         width={dimensions.width}
@@ -82,18 +94,18 @@ export function RingLightOverlay({ config }: RingLightOverlayProps) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Wide Soft Diffusion Glow Filter */}
-          <filter id="macbook-glow-wide" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation={isDesktop ? '28' : '16'} />
+          {/* Ultra-Wide Soft Radiant Flare Filter */}
+          <filter id="macbook-flare-wide" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation={isDesktop ? '36' : '20'} />
           </filter>
 
-          {/* Medium Frosted Tube Glow Filter */}
+          {/* Medium Frosted Glow Filter */}
           <filter id="macbook-glow-med" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation={isDesktop ? '10' : '6'} />
+            <feGaussianBlur stdDeviation={isDesktop ? '14' : '8'} />
           </filter>
         </defs>
 
-        {/* 1. Wide Ambient Radiant Aura (casts light onto user in dark rooms) */}
+        {/* Wide Radiant Aura */}
         <rect
           x={rectX}
           y={rectY}
@@ -103,12 +115,12 @@ export function RingLightOverlay({ config }: RingLightOverlayProps) {
           ry={cornerRadius}
           fill="none"
           stroke={config.color}
-          strokeWidth={tubeWidth * 1.5}
-          filter="url(#macbook-glow-wide)"
-          opacity={0.55 * brightnessNorm}
+          strokeWidth={tubeWidth * 1.8}
+          filter="url(#macbook-flare-wide)"
+          opacity={0.8 * brightnessNorm}
         />
 
-        {/* 2. Medium Frosted Glass Diffusion Tube */}
+        {/* Medium Diffusion Tube */}
         <rect
           x={rectX}
           y={rectY}
@@ -118,12 +130,12 @@ export function RingLightOverlay({ config }: RingLightOverlayProps) {
           ry={cornerRadius}
           fill="none"
           stroke={config.color}
-          strokeWidth={tubeWidth * 1.15}
+          strokeWidth={tubeWidth * 1.3}
           filter="url(#macbook-glow-med)"
-          opacity={0.88}
+          opacity={0.95}
         />
 
-        {/* 3. Solid High-Intensity Luminous Light Core Tube */}
+        {/* Solid High-Intensity Luminous Core */}
         <rect
           x={rectX}
           y={rectY}
@@ -137,7 +149,7 @@ export function RingLightOverlay({ config }: RingLightOverlayProps) {
           opacity={1.0}
         />
 
-        {/* 4. Center 3D High-Gloss White Filament Shine */}
+        {/* White Center Reflection Beam */}
         <rect
           x={rectX}
           y={rectY}
@@ -147,8 +159,8 @@ export function RingLightOverlay({ config }: RingLightOverlayProps) {
           ry={cornerRadius}
           fill="none"
           stroke="#ffffff"
-          strokeWidth={Math.round(tubeWidth * 0.42)}
-          opacity={0.92}
+          strokeWidth={Math.round(tubeWidth * 0.45)}
+          opacity={0.96}
         />
       </svg>
     </div>
