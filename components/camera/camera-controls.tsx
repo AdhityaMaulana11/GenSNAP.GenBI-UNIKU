@@ -26,17 +26,17 @@ export function CameraControls({
   const isFront = facing === 'user';
 
   return (
-    <div className="flex sm:flex-col items-center justify-center gap-2.5 sm:gap-4 p-2 sm:p-3 bg-white/90 backdrop-blur-sm rounded-full border-3 border-[#00327d] shadow-hard-blue">
+    <div className="flex sm:flex-col items-center justify-center gap-2.5 sm:gap-4 p-2.5 sm:p-3.5 bg-white/95 backdrop-blur-sm rounded-2xl sm:rounded-3xl border-3 border-[#1F1A17] shadow-brutal">
       {/* Flip Button */}
       <button
         type="button"
         disabled={disabled}
         onClick={onFlipCamera}
-        className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex flex-col items-center justify-center text-[#00327d] hover:bg-[#00327d]/10 transition-colors disabled:opacity-50"
+        className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border-2 border-[#1F1A17] bg-[#fcf9f8] shadow-brutal-sm flex flex-col items-center justify-center text-[#1F1A17] hover:bg-[#F5F19A] transition-all disabled:opacity-50 active-brutal cursor-pointer"
         title="Flip Camera (Depan / Belakang)"
       >
-        <RefreshCw className="w-5 h-5" />
-        <span className="text-[9px] font-bold font-mono tracking-tighter uppercase mt-0.5">
+        <RefreshCw className="w-5 h-5 text-[#3E4095]" />
+        <span className="text-[9px] font-extrabold font-mono tracking-tighter uppercase mt-0.5">
           FLIP
         </span>
       </button>
@@ -46,10 +46,10 @@ export function CameraControls({
         type="button"
         disabled={disabled}
         onClick={onToggleFlash}
-        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex flex-col items-center justify-center transition-all disabled:opacity-50 ${
+        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl border-2 border-[#1F1A17] shadow-brutal-sm flex flex-col items-center justify-center transition-all disabled:opacity-50 active-brutal cursor-pointer ${
           flashEnabled
-            ? 'bg-[#fcd400] text-[#00327d] ring-2 ring-[#00327d] shadow-hard-gold-sm scale-105'
-            : 'text-[#00327d] hover:bg-[#00327d]/10'
+            ? 'bg-[#fcd400] text-[#1F1A17] ring-2 ring-[#1F1A17] scale-105'
+            : 'bg-[#fcf9f8] text-[#1F1A17] hover:bg-[#F5F19A]'
         }`}
         title={
           isFront
@@ -63,19 +63,19 @@ export function CameraControls({
       >
         {flashEnabled ? (
           isFront ? (
-            <Sparkles className="w-5 h-5 text-[#00327d] fill-current animate-pulse" />
+            <Sparkles className="w-5 h-5 text-[#3E4095] fill-current animate-pulse" />
           ) : (
-            <Zap className="w-5 h-5 fill-current" />
+            <Zap className="w-5 h-5 fill-current text-[#1F1A17]" />
           )
         ) : (
-          <ZapOff className="w-5 h-5" />
+          <ZapOff className="w-5 h-5 text-[#434653]" />
         )}
         <span className="text-[8px] sm:text-[9px] font-extrabold font-mono tracking-tighter uppercase mt-0.5">
           {isFront ? (flashEnabled ? 'RING ON' : 'RING') : (flashEnabled ? 'FLASH ON' : 'FLASH')}
         </span>
       </button>
 
-      <div className="w-px h-6 sm:w-6 sm:h-px bg-[#c3c6d5] my-0.5 sm:my-1" />
+      <div className="w-px h-6 sm:w-6 sm:h-px bg-[#1F1A17]/20 my-0.5 sm:my-1" />
 
       {/* Countdown Timer Options: 3s, 5s, 10s */}
       {([3, 5, 10] as CountdownDuration[]).map((sec) => (
@@ -84,10 +84,10 @@ export function CameraControls({
           type="button"
           disabled={disabled}
           onClick={() => onSelectCountdown(sec)}
-          className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full font-bold text-xs sm:text-sm font-mono flex items-center justify-center transition-all disabled:opacity-50 ${
+          className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl font-extrabold text-xs sm:text-sm font-mono flex items-center justify-center transition-all disabled:opacity-50 border-2 border-[#1F1A17] active-brutal cursor-pointer ${
             countdown === sec
-              ? 'bg-[#00327d] text-white shadow-hard-blue-sm scale-105'
-              : 'text-[#434653] hover:bg-[#00327d]/10'
+              ? 'bg-[#3E4095] text-white shadow-brutal-sm scale-105'
+              : 'bg-white text-[#1F1A17] hover:bg-[#F5F19A]'
           }`}
         >
           {sec}s

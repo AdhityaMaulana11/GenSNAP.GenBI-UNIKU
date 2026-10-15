@@ -12,7 +12,6 @@ import { StripPreview } from '@/components/camera/strip-preview';
 import { CountdownOverlay } from '@/components/camera/countdown-overlay';
 import { BoothHeader } from '@/components/layout/booth-header';
 import { RingLightOverlay, RingLightControls, RingLightConfig } from '@/components/camera/ring-light';
-import { ArrowDoodle } from '@/components/ui/doodles';
 import { ErrorState, ErrorType } from '@/components/ui/error-state';
 import { usePhotoboothSession } from '@/lib/session/session-context';
 import { CameraFacing, CountdownDuration } from '@/types/photobooth';
@@ -96,7 +95,7 @@ export default function BoothCameraPage() {
       isMounted = false;
       cameraManagerRef.current?.stopCamera();
     };
-  }, [facing]);
+  }, [facing, flashEnabled]);
 
   // Flip front/rear camera
   const handleFlipCamera = async () => {
@@ -227,7 +226,7 @@ export default function BoothCameraPage() {
 
   if (errorType) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#fcf9f8]">
+      <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8]">
         <main className="flex-1 flex items-center justify-center p-6">
           <ErrorState
             type={errorType}
@@ -246,14 +245,14 @@ export default function BoothCameraPage() {
   const capturedCount = state.photos.filter((p) => p !== null).length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] bg-dot-pattern-blue select-none overflow-x-hidden relative">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] bg-dot-pattern-blue select-none overflow-x-hidden relative">
       {/* Screen Ring Light Ambient Edge Illumination */}
       <RingLightOverlay config={ringLightConfig} />
 
       <BoothHeader
         backHref="/frames"
         onBack={() => { if (state.isRetaking) cancelRetake(); }}
-        badgeIcon={<Camera className="w-4 h-4 text-[#00327d]" />}
+        badgeIcon={<Camera className="w-4 h-4 text-[#3E4095]" />}
         badgeLabel={
           state.isRetaking
             ? `Ulangi Foto #${(state.retakeIndex ?? 0) + 1}`
@@ -290,11 +289,6 @@ export default function BoothCameraPage() {
 
             {/* Bottom Trigger Area */}
             <div className="relative mt-4 sm:mt-6 flex items-center justify-center">
-              {/* Playful Arrow Doodle pointing to capture button */}
-              <div className="absolute -left-16 sm:-left-20 top-2 pointer-events-none hidden sm:block">
-                <ArrowDoodle size={44} color="#00327d" />
-              </div>
-
               <CaptureButton
                 onClick={handleStartCaptureSequence}
                 disabled={!isCameraReady || isCapturing}

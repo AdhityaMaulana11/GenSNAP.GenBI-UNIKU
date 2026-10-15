@@ -19,7 +19,7 @@ export function StarDoodle({ className = '', size = 32, color = '#fcd400' }: Doo
       <path
         d="M24 2L29.5 17.5L46 19L33 30.5L37 46L24 37.5L11 46L15 30.5L2 19L18.5 17.5L24 2Z"
         fill={color}
-        stroke="#00327d"
+        stroke="#1F1A17"
         strokeWidth="2.5"
         strokeLinejoin="round"
       />
@@ -60,7 +60,7 @@ export function BlueStarDoodle({ className = '', size = 32 }: DoodleProps) {
     >
       <path
         d="M24 2L30.5 17L46 19L34 30.5L38 46L24 38L10 46L14 30.5L2 19L17.5 17L24 2Z"
-        fill="#00327d"
+        fill="#3E4095"
       />
     </svg>
   );
@@ -85,7 +85,7 @@ export function SquiggleDoodle({ className = '', size = 64, color = '#fcd400' }:
       />
       <path
         d="M6 22C14 8 26 8 34 22C42 36 54 36 62 22C70 8 82 8 94 22"
-        stroke="#00327d"
+        stroke="#1F1A17"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -107,14 +107,14 @@ export function HeartDoodle({ className = '', size = 32, color = '#ff8093' }: Do
       <path
         d="M20 34C20 34 6 25 6 14C6 8.5 10.5 4 16 4C19 4 20 6 20 6C20 6 21 4 24 4C29.5 4 34 8.5 34 14C34 25 20 34 20 34Z"
         fill={color}
-        stroke="#00327d"
+        stroke="#1F1A17"
         strokeWidth="2"
       />
     </svg>
   );
 }
 
-export function SparkleDoodle({ className = '', size = 28, color = '#00327d' }: DoodleProps) {
+export function SparkleDoodle({ className = '', size = 28, color = '#3E4095' }: DoodleProps) {
   return (
     <svg
       width={size}
@@ -134,7 +134,7 @@ export function SparkleDoodle({ className = '', size = 28, color = '#00327d' }: 
   );
 }
 
-export function ArrowDoodle({ className = '', size = 48, color = '#00327d' }: DoodleProps) {
+export function ArrowDoodle({ className = '', size = 48, color = '#3E4095' }: DoodleProps) {
   return (
     <svg
       width={size}
@@ -167,7 +167,7 @@ export function CornerDoodle({ className = '', size = 36 }: DoodleProps) {
     >
       <path
         d="M4 28V6C4 4.89543 4.89543 4 6 4H28"
-        stroke="#00327d"
+        stroke="#1F1A17"
         strokeWidth="4"
         strokeLinecap="round"
       />

@@ -1,7 +1,7 @@
 # 📸 GenSNAP by GenBI UNIKU
 
 > **Klik Momennya, Abadikan Ceritanya.**  
-> *Official Web-Based Photobooth Application for Generasi Baru Indonesia (GenBI) Komisariat Universitas Kuningan — Champions Explorer Edition.*
+> *Official Web-Based Photobooth Application for Generasi Baru Indonesia (GenBI) Komisariat Universitas Kuningan: Champions Explorer Edition.*
 
 ![Next.js](https://img.shields.io/badge/Next.js-15+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)

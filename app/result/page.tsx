@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Download, Share2, RefreshCw, Camera, Check } from 'lucide-react';
+import { Download, Share2, RefreshCw, Camera, Check, ArrowLeft } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
-import { StarOutlineDoodle, HeartDoodle } from '@/components/ui/doodles';
 import { usePhotoboothSession } from '@/lib/session/session-context';
 import { downloadPNG, downloadJPG, shareImage } from '@/lib/export/export-manager';
 
@@ -60,16 +59,29 @@ export default function ExportResultPage() {
 
   if (!finalDataUrl || !finalBlob) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#fcf9f8]">
+      <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8]">
         <Header />
-        <main className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-          <p className="text-lg font-bold text-[#00327d] mb-4">
-            Belum ada hasil photostrip yang dicetak.
+        <main className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-white border-3 border-[#1F1A17] flex items-center justify-center text-[#1F1A17] mb-4 shadow-brutal">
+            <Camera className="w-8 h-8 text-[#3E4095]" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1F1A17] mb-2 font-['var(--font-bricolage)']">
+            BELUM ADA HASIL
+          </h1>
+          <p className="text-sm text-[#434653] font-medium mb-6">
+            Belum ada hasil photostrip yang dicetak. Mulai sesi photobooth sekarang untuk membuat foto kenanganmu.
           </p>
-          <Button variant="primary" onClick={() => router.push('/mode')}>
-            Mulai Photobooth
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <Button variant="outline" onClick={() => router.push('/')} className="flex-1">
+              <ArrowLeft className="w-4 h-4 mr-1" />
+              <span>Ke Beranda</span>
+            </Button>
+            <Button variant="primary" onClick={() => router.push('/mode')} className="flex-1 shadow-brutal">
+              <span>Mulai Sesi</span>
+            </Button>
+          </div>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -77,39 +89,41 @@ export default function ExportResultPage() {
   const isVertical = currentFrame.id === 'frame-01';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative overflow-x-hidden">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] relative overflow-x-hidden">
       <Header />
-
-      {/* Decorative Doodles */}
-      <div className="absolute top-20 left-4 sm:left-16 pointer-events-none hidden sm:block">
-        <StarOutlineDoodle size={48} color="#fcd400" />
-      </div>
-      <div className="absolute bottom-16 right-4 sm:right-16 pointer-events-none opacity-80 hidden sm:block">
-        <HeartDoodle size={44} color="#a5bdff" />
-      </div>
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-14 flex flex-col items-center">
         {/* Header Title */}
-        <div className="text-center max-w-xl mx-auto mb-6 sm:mb-14 px-2">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#00327d] tracking-tight font-['var(--font-bricolage)']">
-            Kenanganmu sudah siap!
+        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-14 px-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-100 text-emerald-900 border-2 border-[#1F1A17] font-mono font-extrabold text-xs mb-3 shadow-brutal-sm select-none">
+            <Check className="w-3.5 h-3.5 stroke-[3] text-emerald-700" aria-hidden="true" />
+            <span>[ STATUS // SELESAI & SIAP DIUNDUH ]</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1F1A17] tracking-tight font-['var(--font-bricolage)']">
+            KENANGANMU SUDAH SIAP!
           </h1>
-          <p className="text-xs sm:text-base text-[#434653] font-medium mt-1.5 sm:mt-2 leading-relaxed">
-            Here is your digital photostrip. Download, share, and keep the vibes going.
+          <p className="text-xs sm:text-base text-[#434653] font-medium mt-2 leading-relaxed">
+            Ini hasil photostrip digitalmu. Unduh dengan resolusi tinggi, simpan, atau bagikan momen seru ke teman-temanmu.
           </p>
         </div>
 
         {/* Photostrip & Action Controls Container */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-8 sm:gap-14 max-w-4xl">
-          {/* Left Column: Composed Photostrip Preview */}
+          {/* Left Column: Composed Photostrip Preview in Museum Mount */}
           <div className="flex flex-col items-center shrink-0">
             <div
-              className={`relative rounded-3xl overflow-hidden bg-white p-2.5 sm:p-3 border-4 border-[#00327d] shadow-hard-blue max-w-[86vw] ${
+              className={`relative rounded-3xl overflow-hidden bg-white p-3 sm:p-4 border-4 border-[#1F1A17] shadow-brutal-lg max-w-[86vw] ${
                 isVertical
                   ? 'w-[240px] xs:w-[260px] sm:w-[280px] aspect-[560/1600]'
                   : 'w-[290px] xs:w-[320px] sm:w-[380px] aspect-[1067/1600]'
               }`}
             >
+              {/* Corner crosshairs */}
+              <div className="absolute top-2 left-2 font-mono text-[10px] text-[#1F1A17]/40 select-none">+</div>
+              <div className="absolute top-2 right-2 font-mono text-[10px] text-[#1F1A17]/40 select-none">+</div>
+              <div className="absolute bottom-2 left-2 font-mono text-[10px] text-[#1F1A17]/40 select-none">+</div>
+              <div className="absolute bottom-2 right-2 font-mono text-[10px] text-[#1F1A17]/40 select-none">+</div>
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={finalDataUrl}
@@ -119,17 +133,17 @@ export default function ExportResultPage() {
             </div>
           </div>
 
-          {/* Right Column: Actions */}
-          <div className="flex flex-col items-stretch gap-3 sm:gap-4 w-full max-w-sm">
+          {/* Right Column: Tactical Action Deck */}
+          <div className="flex flex-col items-stretch gap-3.5 sm:gap-4 w-full max-w-sm">
             {/* Primary Download PNG */}
             <Button
               variant="primary"
               size="lg"
               onClick={handleDownloadPNG}
-              className="w-full py-3.5 sm:py-4 text-sm sm:text-lg"
+              className="w-full py-4 text-sm sm:text-base shadow-brutal font-mono font-extrabold"
             >
-              <Download className="w-5 h-5 text-[#fcd400]" />
-              Download PNG
+              <Download className="w-5 h-5 text-[#fcd400] mr-1" aria-hidden="true" />
+              <span>DOWNLOAD PNG (HD)</span>
             </Button>
 
             {/* Download JPG */}
@@ -138,10 +152,10 @@ export default function ExportResultPage() {
               size="lg"
               onClick={handleDownloadJPG}
               isLoading={isProcessingJPG}
-              className="w-full py-3.5 sm:py-4 text-sm sm:text-base text-[#1c1b1b]"
+              className="w-full py-4 text-sm sm:text-base shadow-brutal-sm font-mono font-extrabold"
             >
-              <Download className="w-5 h-5 text-[#434653]" />
-              Download JPG
+              <Download className="w-5 h-5 text-[#3E4095] mr-1" aria-hidden="true" />
+              <span>DOWNLOAD JPG (COMPACT)</span>
             </Button>
 
             {/* Share Button */}
@@ -149,43 +163,43 @@ export default function ExportResultPage() {
               variant="gold"
               size="lg"
               onClick={handleShare}
-              className="w-full py-3.5 sm:py-4 text-sm sm:text-lg"
+              className="w-full py-4 text-sm sm:text-base shadow-brutal font-mono font-extrabold"
             >
               {shareSuccess ? (
                 <>
-                  <Check className="w-5 h-5 text-emerald-700" />
-                  Tautan Dibagikan!
+                  <Check className="w-5 h-5 text-emerald-800 mr-1" aria-hidden="true" />
+                  <span>TAUTAN DIBAGIKAN!</span>
                 </>
               ) : (
                 <>
-                  <Share2 className="w-5 h-5 text-[#00327d]" />
-                  Share
+                  <Share2 className="w-5 h-5 text-[#1F1A17] mr-1" aria-hidden="true" />
+                  <span>BAGIKAN FOTO</span>
                 </>
               )}
             </Button>
 
-            <div className="w-full h-px bg-[#c3c6d5] my-1 sm:my-2" />
+            <div className="w-full h-0.5 bg-[#1F1A17]/20 my-1 sm:my-2" />
 
             {/* Retake & Create Another Side by Side */}
-            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full">
+            <div className="grid grid-cols-2 gap-3 w-full">
               <Button
                 variant="outline"
                 size="md"
                 onClick={handleRetakeAll}
-                className="w-full text-xs sm:text-sm py-2.5 sm:py-3"
+                className="w-full text-xs font-mono font-bold py-3"
               >
-                <RefreshCw className="w-4 h-4" />
-                Retake
+                <RefreshCw className="w-4 h-4 mr-1 text-[#ED3237]" aria-hidden="true" />
+                <span>ULANGI SESI</span>
               </Button>
 
               <Button
                 variant="outline"
                 size="md"
                 onClick={handleCreateAnother}
-                className="w-full text-xs sm:text-sm py-2.5 sm:py-3"
+                className="w-full text-xs font-mono font-bold py-3"
               >
-                <Camera className="w-4 h-4" />
-                Create Another
+                <Camera className="w-4 h-4 mr-1 text-[#3E4095]" aria-hidden="true" />
+                <span>FOTO BARU</span>
               </Button>
             </div>
           </div>

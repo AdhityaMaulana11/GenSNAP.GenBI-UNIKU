@@ -15,7 +15,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { BoothHeader } from '@/components/layout/booth-header';
 import { Footer } from '@/components/layout/footer';
-import { StarOutlineDoodle, HeartDoodle } from '@/components/ui/doodles';
 import { LivePhotoData } from '@/types/photobooth';
 import { triggerDownload, downloadJPG, shareImage } from '@/lib/export/export-manager';
 
@@ -26,7 +25,7 @@ interface LivePhotoResultPageProps {
 }
 
 /**
- * Full-page Live Photo result — layout mirrors the regular /result page.
+ * Full-page Live Photo result: layout mirrors the regular /result page.
  * Left column: interactive framed photostrip with per-slot video playback.
  * Right column: download / share actions.
  */
@@ -127,7 +126,7 @@ export function LivePhotoResultPage({
   const photostrip = hasFrame && frame ? (
     /* Framed multi-slot live photo */
     <div
-      className="relative rounded-3xl overflow-hidden border-4 border-[#00327d] bg-white shadow-hard-blue select-none"
+      className="relative rounded-3xl overflow-hidden border-4 border-[#3E4095] bg-white shadow-hard-blue select-none"
       style={{
         width: isVertical ? '240px' : '300px',
         maxWidth: '86vw',
@@ -174,12 +173,12 @@ export function LivePhotoResultPage({
             />
             {!isSlotPlaying && (
               <div className="absolute inset-0 bg-black/10 group-hover/slot:bg-black/30 flex items-center justify-center transition-colors">
-                <div className="w-8 h-8 rounded-full bg-[#00327d]/80 text-[#fcd400] flex items-center justify-center opacity-0 group-hover/slot:opacity-100 transition-opacity">
+                <div className="w-8 h-8 rounded-full bg-[#3E4095]/80 text-[#fcd400] flex items-center justify-center opacity-0 group-hover/slot:opacity-100 transition-opacity">
                   <Play className="w-4 h-4 fill-current ml-0.5" />
                 </div>
               </div>
             )}
-            <div className="absolute bottom-1 right-1 z-10 px-1.5 py-0.5 rounded bg-[#fcd400] text-[#00327d] text-[9px] font-mono font-extrabold shadow-sm pointer-events-none">
+            <div className="absolute bottom-1 right-1 z-10 px-1.5 py-0.5 rounded bg-[#fcd400] text-[#3E4095] text-[9px] font-mono font-extrabold shadow-sm pointer-events-none">
               LIVE #{idx + 1}
             </div>
           </div>
@@ -195,8 +194,8 @@ export function LivePhotoResultPage({
       />
 
       {/* LIVE badge */}
-      <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-30 flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-[#fcd400] text-[#00327d] font-mono font-extrabold text-[10px] sm:text-xs border-2 border-[#00327d] shadow-hard-gold-sm">
-        <span className={`w-2 h-2 rounded-full bg-[#00327d] ${isPlayingAll ? 'animate-ping' : ''}`} />
+      <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-30 flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#fcd400] text-[#1F1A17] font-mono font-extrabold text-[10px] sm:text-xs border-2 border-[#1F1A17] shadow-brutal-sm">
+        <span className={`w-2 h-2 rounded-full bg-[#1F1A17] ${isPlayingAll ? 'animate-ping' : ''}`} />
         <span>LIVE FRAME</span>
       </div>
     </div>
@@ -204,7 +203,7 @@ export function LivePhotoResultPage({
     /* Single live photo fallback */
     <div
       onClick={togglePlayAll}
-      className="relative w-[280px] sm:w-[360px] aspect-[4/3] rounded-3xl overflow-hidden bg-black border-4 border-[#00327d] shadow-hard-blue cursor-pointer group"
+      className="relative w-[280px] sm:w-[360px] aspect-[4/3] rounded-3xl overflow-hidden bg-black border-4 border-[#3E4095] shadow-hard-blue cursor-pointer group"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -219,35 +218,30 @@ export function LivePhotoResultPage({
         onEnded={() => setIsPlayingAll(false)}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${isPlayingAll ? 'opacity-100' : 'opacity-0'}`}
       />
-      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fcd400] text-[#00327d] font-mono font-extrabold text-xs border-2 border-[#00327d] shadow-hard-gold-sm">
-        <span className="w-2 h-2 rounded-full bg-[#00327d] animate-ping" />
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#fcd400] text-[#1F1A17] font-mono font-extrabold text-xs border-2 border-[#1F1A17] shadow-brutal-sm">
+        <span className="w-2 h-2 rounded-full bg-[#1F1A17] animate-ping" />
         LIVE
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative overflow-x-hidden">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] relative overflow-x-hidden">
       <BoothHeader
         backHref="/frames"
         onBack={onRetake}
-        badgeIcon={<Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00327d]" />}
+        badgeIcon={<Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#3E4095]" />}
         badgeLabel="Hasil Live Photo"
       />
-
-      {/* Decorative doodles */}
-      <div className="absolute top-20 left-4 sm:left-16 pointer-events-none hidden sm:block">
-        <StarOutlineDoodle size={48} color="#fcd400" />
-      </div>
-      <div className="absolute bottom-16 right-4 sm:right-16 pointer-events-none opacity-80 hidden sm:block">
-        <HeartDoodle size={44} color="#a5bdff" />
-      </div>
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-14 flex flex-col items-center">
         {/* Title */}
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-12 px-2">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#00327d] tracking-tight font-['var(--font-bricolage)']">
-            Live Photo siap!
+          <div className="inline-block px-3 py-1 rounded-xl bg-[#F5F19A] border-2 border-[#1F1A17] text-xs font-mono font-bold text-[#1F1A17] mb-3 shadow-brutal-sm">
+            [ HASIL LIVE PHOTO RESMI ]
+          </div>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#1F1A17] tracking-tight font-['var(--font-bricolage)']">
+            LIVE PHOTO SIAP!
           </h1>
           <p className="text-xs sm:text-base text-[#434653] font-medium mt-1.5 sm:mt-2 leading-relaxed">
             Klik foto untuk memutar motion. Download, share, dan abadikan momenmu bersama GenBI UNIKU.
@@ -263,7 +257,7 @@ export function LivePhotoResultPage({
             {/* Play / Pause All button */}
             <button
               onClick={togglePlayAll}
-              className="px-4 py-2 sm:px-6 sm:py-2.5 rounded-full bg-[#00327d] text-white font-extrabold text-xs sm:text-sm border-2 border-[#00327d] shadow-hard-blue-sm hover:bg-[#00327d]/90 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
+              className="px-5 py-2.5 rounded-xl bg-[#3E4095] text-white font-mono font-extrabold text-xs sm:text-sm border-2 border-[#1F1A17] shadow-brutal-sm hover:-translate-y-0.5 active-brutal flex items-center gap-2 transition-all cursor-pointer"
             >
               {isPlayingAll ? (
                 <>
@@ -316,7 +310,7 @@ export function LivePhotoResultPage({
                 </>
               ) : (
                 <>
-                  <Share2 className="w-5 h-5 text-[#00327d]" />
+                  <Share2 className="w-5 h-5 text-[#3E4095]" />
                   Share
                 </>
               )}

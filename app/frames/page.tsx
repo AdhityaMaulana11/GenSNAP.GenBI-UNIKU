@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { Camera, Image as ImageIcon, Sparkles, Upload, ArrowRight } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { StarDoodle, StarOutlineDoodle } from '@/components/ui/doodles';
 import { Button } from '@/components/ui/button';
 import { FrameCard } from '@/components/frames/frame-card';
 import { usePhotoboothSession } from '@/lib/session/session-context';
@@ -26,71 +25,68 @@ export default function FrameSelectionPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] bg-dot-pattern-blue relative overflow-x-hidden">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] bg-dot-pattern-blue relative overflow-x-hidden">
       <Header />
 
-      <div className="flex-1 flex w-full max-w-7xl mx-auto">
-        {/* Left Vertical Nav Toolbar (from Stitch design) */}
-        <aside className="hidden lg:flex flex-col items-center gap-6 py-12 px-6 border-r-3 border-[#00327d]/15">
+      <div className="flex-1 flex flex-col lg:flex-row w-full max-w-7xl mx-auto">
+        {/* Tactical Quick Rail */}
+        <aside aria-label="Aksi Cepat" className="flex lg:flex-col items-center justify-center gap-3 sm:gap-4 py-4 lg:py-12 px-4 sm:px-6 border-b-3 lg:border-b-0 lg:border-r-3 border-[#1F1A17] bg-white/50">
           <Link
             href={state.mode === 'live-photo' ? '/booth/permission?mode=live-photo' : '/booth/permission?mode=photo'}
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-[#434653] hover:bg-[#00327d]/10 transition-colors"
-            title="Camera"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border-2 border-[#1F1A17] shadow-brutal-sm flex items-center justify-center text-[#1F1A17] hover:bg-[#3E4095] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#3E4095]"
+            title="Kamera Langsung"
+            aria-label="Kamera Langsung"
           >
-            <Camera className="w-6 h-6" />
+            <Camera className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
           </Link>
           <div
-            className="w-12 h-12 rounded-2xl bg-[#00327d] text-white flex items-center justify-center shadow-hard-blue-sm"
-            title="Frames"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#3E4095] text-white border-2 border-[#1F1A17] shadow-brutal-sm flex items-center justify-center select-none"
+            title="Koleksi Frame Aktif"
+            aria-label="Koleksi Frame Aktif"
           >
-            <ImageIcon className="w-6 h-6 text-[#fcd400]" />
+            <ImageIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#fcd400]" aria-hidden="true" />
           </div>
           <Link
             href="/#frames"
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-[#434653] hover:bg-[#00327d]/10 transition-colors"
-            title="Gallery"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border-2 border-[#1F1A17] shadow-brutal-sm flex items-center justify-center text-[#1F1A17] hover:bg-[#F5F19A] transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#3E4095]"
+            title="Galeri Landing"
+            aria-label="Galeri Landing"
           >
-            <Sparkles className="w-6 h-6" />
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-[#3E4095]" aria-hidden="true" />
           </Link>
           <Link
             href="/frames/custom"
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-[#434653] hover:bg-[#00327d]/10 transition-colors"
-            title="Upload Custom"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border-2 border-[#1F1A17] shadow-brutal-sm flex items-center justify-center text-[#1F1A17] hover:bg-[#3E4095] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#3E4095]"
+            title="Upload Custom Frame"
+            aria-label="Upload Custom Frame"
           >
-            <Upload className="w-6 h-6" />
+            <Upload className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
           </Link>
         </aside>
 
-        {/* Main Content Area */}
-        <main className="flex-1 px-5 sm:px-10 py-10 sm:py-14 flex flex-col items-center relative">
-          {/* Header Title with Star Doodles */}
-          <div className="text-center relative max-w-2xl mx-auto mb-10">
-            <div className="absolute -top-4 -left-6 pointer-events-none">
-              <StarOutlineDoodle size={32} color="#fcd400" />
-            </div>
-            <div className="absolute -top-3 -right-6 pointer-events-none">
-              <StarDoodle size={28} color="#fcd400" />
-            </div>
-
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#00327d] text-white font-bold text-xs mb-3 shadow-hard-blue-sm">
+        {/* Main Specimen Gallery Area */}
+        <main className="flex-1 px-5 sm:px-10 py-8 sm:py-14 flex flex-col items-center relative">
+          {/* Header Title */}
+          <div className="text-center relative max-w-2xl mx-auto mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#F5F19A] text-[#1F1A17] font-mono font-extrabold text-xs mb-3 border-2 border-[#1F1A17] shadow-brutal-sm select-none">
               {state.mode === 'live-photo' ? (
                 <>
-                  <Sparkles className="w-3.5 h-3.5 text-[#fcd400]" />
-                  <span>Mode: Live Photo Frame</span>
+                  <Sparkles className="w-3.5 h-3.5 text-[#3E4095]" aria-hidden="true" />
+                  <span>[ MODE: LIVE PHOTO FRAME ]</span>
                 </>
               ) : (
                 <>
-                  <Camera className="w-3.5 h-3.5 text-[#fcd400]" />
-                  <span>Mode: Photo Strip</span>
+                  <Camera className="w-3.5 h-3.5 text-[#3E4095]" aria-hidden="true" />
+                  <span>[ MODE: PHOTO STRIP ]</span>
                 </>
               )}
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#00327d] tracking-tight font-['var(--font-bricolage)']">
-              Pilih Frame Favoritmu
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1F1A17] tracking-tight font-['var(--font-bricolage)']">
+              PILIH FRAME FAVORITMU
             </h1>
             <p className="text-sm sm:text-base text-[#434653] font-medium mt-2">
-              Pilih layout frame untuk sesi {state.mode === 'live-photo' ? 'Live Photo' : 'Photobooth'}-mu
+              Pilih layout frame resmi untuk sesi {state.mode === 'live-photo' ? 'Live Photo' : 'Photobooth'} kamu.
             </p>
           </div>
 
@@ -106,16 +102,16 @@ export default function FrameSelectionPage() {
             ))}
           </div>
 
-          {/* Bottom Actions: Custom Frame Upload & Start Photobooth */}
+          {/* Bottom Actions */}
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
             <Link href="/frames/custom" className="w-full sm:w-auto">
               <Button
-                variant="gold"
+                variant="outline"
                 size="md"
                 className="w-full sm:w-auto px-6 py-3"
               >
-                <Upload className="w-4 h-4" />
-                Upload Custom Frame
+                <Upload className="w-4 h-4 mr-1" aria-hidden="true" />
+                <span>Upload Custom</span>
               </Button>
             </Link>
 
@@ -123,16 +119,11 @@ export default function FrameSelectionPage() {
               variant="primary"
               size="md"
               onClick={handleContinue}
-              className="w-full sm:w-auto px-8 py-3"
+              className="w-full sm:w-auto px-8 py-3 shadow-brutal"
             >
-              Mulai Foto
-              <ArrowRight className="w-4 h-4" />
+              <span>Mulai Foto</span>
+              <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
             </Button>
-          </div>
-
-          {/* Bottom Right Decorative Star */}
-          <div className="absolute bottom-4 right-6 pointer-events-none hidden md:block">
-            <StarOutlineDoodle size={36} color="#fcd400" />
           </div>
         </main>
       </div>

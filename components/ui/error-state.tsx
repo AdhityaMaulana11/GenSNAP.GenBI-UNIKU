@@ -80,8 +80,8 @@ export function ErrorState({
   const displayMessage = message || config.message;
 
   return (
-    <div className="w-full max-w-md mx-auto my-auto p-6 sm:p-8 bg-white rounded-3xl border-3 border-[#00327d] shadow-hard-blue text-center flex flex-col items-center gap-4">
-      <div className="w-16 h-16 rounded-full bg-[#ffdad6] border-2 border-[#ba1a1a] flex items-center justify-center text-[#ba1a1a]">
+    <div className="w-full max-w-md mx-auto my-auto p-6 sm:p-8 bg-white rounded-3xl border-3 border-[#1F1A17] shadow-brutal text-center flex flex-col items-center gap-4">
+      <div className="w-16 h-16 rounded-2xl bg-[#ffdad6] border-2 border-[#ED3237] shadow-brutal-sm flex items-center justify-center text-[#ED3237]">
         {type.startsWith('camera') ? (
           <CameraOff className="w-8 h-8" />
         ) : (
@@ -89,7 +89,7 @@ export function ErrorState({
         )}
       </div>
 
-      <h3 className="text-xl sm:text-2xl font-extrabold text-[#00327d]">
+      <h3 className="text-xl sm:text-2xl font-extrabold text-[#1F1A17] font-['var(--font-bricolage)']">
         {displayTitle}
       </h3>
 

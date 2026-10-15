@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { RefreshCw, Sparkles, Layers } from 'lucide-react';
+import { RefreshCw, Sparkles, Layers, ArrowLeft } from 'lucide-react';
 import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
-import { StarDoodle, SparkleDoodle } from '@/components/ui/doodles';
 import { usePhotoboothSession } from '@/lib/session/session-context';
 import { renderPhotostrip } from '@/lib/canvas/canvas-renderer';
 
@@ -20,7 +20,6 @@ export default function PhotoPreviewPage() {
 
   const [isComposing, setIsComposing] = useState(false);
 
-  // If no photos exist, redirect back to booth
   const validPhotos = state.photos.filter((p) => p !== null);
 
   const handleRetakeSingle = (index: number) => {
@@ -45,45 +44,54 @@ export default function PhotoPreviewPage() {
 
   if (validPhotos.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#fcf9f8]">
+      <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8]">
         <Header />
-        <main className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-          <p className="text-lg font-bold text-[#00327d] mb-4">
-            Belum ada foto yang diambil.
+        <main className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-white border-3 border-[#1F1A17] flex items-center justify-center text-[#1F1A17] mb-4 shadow-brutal">
+            <RefreshCw className="w-8 h-8 text-[#3E4095]" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1F1A17] mb-2 font-['var(--font-bricolage)']">
+            BELUM ADA FOTO
+          </h1>
+          <p className="text-sm text-[#434653] font-medium mb-6">
+            Sesi foto kamu belum dimulai atau foto belum tersimpan di memori.
           </p>
-          <Button variant="primary" onClick={() => router.push('/booth')}>
-            Buka Kamera
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <Button variant="outline" onClick={() => router.push('/')} className="flex-1">
+              <ArrowLeft className="w-4 h-4 mr-1" />
+              <span>Ke Beranda</span>
+            </Button>
+            <Button variant="primary" onClick={() => router.push('/booth')} className="flex-1 shadow-brutal">
+              <span>Buka Kamera</span>
+            </Button>
+          </div>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative overflow-x-hidden">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] relative overflow-x-hidden">
       <Header />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-14 flex flex-col items-center">
         {/* Header Title */}
-        <div className="text-center relative max-w-xl mx-auto mb-6 sm:mb-10 px-2">
-          <div className="absolute -top-3 -right-6 pointer-events-none hidden sm:block">
-            <SparkleDoodle size={28} color="#fcd400" />
+        <div className="text-center relative max-w-xl mx-auto mb-8 sm:mb-12 px-2">
+          <div className="inline-block px-3 py-1 rounded-xl bg-[#F5F19A] border-2 border-[#1F1A17] text-xs font-mono font-bold text-[#1F1A17] mb-3 shadow-brutal-sm">
+            [ TAHAP 03 // INSPEKSI HASIL FOTO ]
           </div>
-          <div className="absolute -bottom-2 -left-6 pointer-events-none hidden sm:block">
-            <StarDoodle size={28} color="#fcd400" />
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#00327d] tracking-tight font-['var(--font-bricolage)']">
-            Pratinjau Foto
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1F1A17] tracking-tight font-['var(--font-bricolage)']">
+            PRATINJAU HASIL FOTO
           </h1>
-          <p className="text-xs sm:text-base text-[#434653] font-medium mt-1.5 sm:mt-2">
-            Periksa hasil jepretanmu. Kamu bisa mengulang foto tertentu jika diinginkan.
+          <p className="text-xs sm:text-base text-[#434653] font-medium mt-2">
+            Periksa hasil jepretanmu. Kamu bisa mengulang foto tertentu yang kurang pas sebelum dicetak.
           </p>
         </div>
 
-        {/* Captured Photos Grid */}
+        {/* Captured Photos Grid: Proof Sheet Style */}
         <div
-          className={`grid gap-4 sm:gap-8 w-full max-w-4xl mb-8 sm:mb-12 ${
+          className={`grid gap-5 sm:gap-8 w-full max-w-4xl mb-10 sm:mb-14 ${
             state.photos.length <= 2
               ? 'grid-cols-1 sm:grid-cols-2 max-w-xl mx-auto'
               : 'grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3'
@@ -92,20 +100,20 @@ export default function PhotoPreviewPage() {
           {state.photos.map((photo, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border-2 sm:border-3 border-[#00327d] shadow-hard-blue flex flex-col items-center group relative"
+              className="bg-white rounded-3xl p-4 sm:p-5 border-3 border-[#1F1A17] shadow-brutal flex flex-col items-center group relative"
             >
               {/* Badge */}
-              <div className="w-full flex items-center justify-between mb-2.5 sm:mb-3">
-                <span className="font-extrabold text-xs sm:text-sm text-[#00327d] uppercase tracking-wider font-mono">
-                  Foto {idx + 1}
+              <div className="w-full flex items-center justify-between mb-3 border-b-2 border-[#1F1A17]/15 pb-2">
+                <span className="font-extrabold text-xs sm:text-sm text-[#1F1A17] uppercase tracking-wider font-mono">
+                  SLOT #{idx + 1}
                 </span>
-                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                  Siap
+                <span className="text-[10px] font-mono font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-lg border border-emerald-400">
+                  SIAP ✓
                 </span>
               </div>
 
               {/* Photo Image */}
-              <div className="w-full aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-[#f0eded] border-2 border-[#00327d]/20 relative mb-3 sm:mb-4">
+              <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#f0eded] border-2 border-[#1F1A17] relative mb-4 shadow-brutal-sm">
                 {photo ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
@@ -114,8 +122,8 @@ export default function PhotoPreviewPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-xs text-[#737784]">
-                    Kosong
+                  <div className="w-full h-full flex items-center justify-center text-xs font-mono text-[#737784]">
+                    KOSONG
                   </div>
                 )}
               </div>
@@ -127,23 +135,23 @@ export default function PhotoPreviewPage() {
                 onClick={() => handleRetakeSingle(idx)}
                 className="w-full text-xs py-2 gap-1.5"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                Ulangi Foto {idx + 1}
+                <RefreshCw className="w-3.5 h-3.5 text-[#ED3237]" aria-hidden="true" />
+                <span>Ulangi Foto #{idx + 1}</span>
               </Button>
             </div>
           ))}
         </div>
 
         {/* Bottom Actions Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
           <Button
             variant="outline"
             size="md"
             onClick={() => router.push('/frames')}
-            className="w-full sm:flex-1 py-3 sm:py-3.5 text-xs sm:text-sm"
+            className="w-full sm:flex-1 py-3.5 text-xs sm:text-sm font-mono"
           >
-            <Layers className="w-4 h-4" />
-            Ganti Frame
+            <Layers className="w-4 h-4 mr-1 text-[#3E4095]" aria-hidden="true" />
+            <span>Ganti Frame</span>
           </Button>
 
           <Button
@@ -151,13 +159,15 @@ export default function PhotoPreviewPage() {
             size="lg"
             onClick={handleGenerateFinal}
             isLoading={isComposing}
-            className="w-full sm:flex-1 py-3 sm:py-3.5 text-sm sm:text-base"
+            className="w-full sm:flex-1 py-4 text-sm sm:text-base shadow-brutal font-mono"
           >
-            <Sparkles className="w-5 h-5 text-[#00327d]" />
-            Cetak Hasil
+            <Sparkles className="w-5 h-5 text-[#1F1A17] mr-1" aria-hidden="true" />
+            <span>Cetak Hasil</span>
           </Button>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

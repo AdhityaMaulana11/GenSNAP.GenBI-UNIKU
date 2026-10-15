@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { usePhotoboothSession } from '@/lib/session/session-context';
 import { FrameConfig, FrameSlot } from '@/types/photobooth';
+import { Footer } from '@/components/layout/footer';
 
 export default function CustomFramePage() {
   const router = useRouter();
@@ -126,21 +127,24 @@ export default function CustomFramePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] relative">
       <Header />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-5 sm:px-8 py-10 sm:py-14 flex flex-col items-center">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-8 py-10 sm:py-14 flex flex-col items-center">
         <div className="text-center max-w-xl mx-auto mb-8">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#00327d] tracking-tight font-['var(--font-bricolage)']">
-            Upload Custom Frame
+          <div className="inline-block px-3 py-1 rounded-xl bg-[#F5F19A] border-2 border-[#1F1A17] text-xs font-mono font-bold text-[#1F1A17] mb-3 shadow-brutal-sm">
+            [ PORTAL UNGGAH FRAME // FORMAT PNG ]
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1F1A17] tracking-tight font-['var(--font-bricolage)']">
+            UPLOAD CUSTOM FRAME
           </h1>
           <p className="text-sm sm:text-base text-[#434653] font-medium mt-2">
-            Unggah desain frame buatanmu sendiri (format PNG transparan)
+            Unggah desain frame buatanmu sendiri format PNG dengan area transparan.
           </p>
         </div>
 
         {errorMsg && (
-          <div className="w-full max-w-md p-4 mb-6 rounded-2xl bg-[#ffdad6] border-2 border-[#ba1a1a] text-[#93000a] flex items-center gap-3 text-sm font-semibold">
+          <div className="w-full max-w-md p-4 mb-6 rounded-2xl bg-[#ffdad6] border-2 border-[#ED3237] text-[#93000a] flex items-center gap-3 text-sm font-semibold shadow-brutal-sm">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{errorMsg}</span>
           </div>
@@ -150,7 +154,7 @@ export default function CustomFramePage() {
           /* Dropzone / Upload Box */
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="w-full max-w-md aspect-[4/3] rounded-3xl border-3 border-dashed border-[#00327d] bg-white hover:bg-[#00327d]/5 transition-all duration-200 flex flex-col items-center justify-center p-8 cursor-pointer shadow-hard-blue text-center group"
+            className="w-full max-w-md aspect-[4/3] rounded-3xl border-3 border-dashed border-[#1F1A17] bg-white hover:bg-[#F5F19A]/20 transition-all duration-200 flex flex-col items-center justify-center p-8 cursor-pointer shadow-brutal text-center group"
           >
             <input
               ref={fileInputRef}
@@ -159,35 +163,36 @@ export default function CustomFramePage() {
               onChange={handleFileChange}
               className="hidden"
             />
-            <div className="w-16 h-16 rounded-full bg-[#fcd400] text-[#00327d] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-hard-gold-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[#fcd400] text-[#1F1A17] border-2 border-[#1F1A17] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-brutal-sm">
               <Upload className="w-8 h-8" />
             </div>
-            <h3 className="font-extrabold text-lg sm:text-xl text-[#00327d]">
-              Pilih file gambar PNG
+            <h3 className="font-extrabold text-xl text-[#1F1A17] font-['var(--font-bricolage)']">
+              Pilih File Gambar PNG
             </h3>
             <p className="text-xs sm:text-sm text-[#434653] mt-1 font-medium">
-              Pastikan area foto memiliki transparansi
+              Pastikan area penempatan foto transparan
             </p>
-            <span className="mt-4 text-xs font-bold text-[#00327d] uppercase tracking-wider bg-[#e8f0fe] px-3 py-1 rounded-full">
-              Format PNG (Max 15MB)
+            <span className="mt-4 text-xs font-mono font-bold text-[#3E4095] uppercase tracking-wider bg-[#eef0fa] border border-[#3E4095]/30 px-3 py-1 rounded-xl">
+              PNG TRANSPARAN (MAKS 15MB)
             </span>
           </div>
         ) : (
           /* Preview & Slot Configuration */
-          <div className="w-full max-w-lg flex flex-col items-center bg-white p-6 sm:p-8 rounded-3xl border-3 border-[#00327d] shadow-hard-blue">
-            <div className="w-full max-w-[240px] aspect-[560/1600] max-h-[380px] relative rounded-2xl overflow-hidden border-2 border-[#00327d]/20 bg-[#fcf9f8] p-2 mb-6">
+          <div className="w-full max-w-lg flex flex-col items-center bg-white p-6 sm:p-8 rounded-3xl border-3 border-[#1F1A17] shadow-brutal">
+            <div className="w-full max-w-[240px] aspect-[560/1600] max-h-[380px] relative rounded-2xl overflow-hidden border-2 border-[#1F1A17] bg-[#fcf9f8] p-3 mb-6 shadow-brutal-sm">
               <Image
                 src={previewUrl}
                 alt="Custom Frame Preview"
                 fill
+                sizes="(max-width: 640px) 240px, 300px"
                 className="object-contain"
               />
             </div>
 
             <div className="w-full space-y-4">
               <div>
-                <label className="block text-sm font-bold text-[#00327d] mb-2">
-                  Jumlah Slot Foto:
+                <label className="block text-xs font-mono font-extrabold text-[#1F1A17] uppercase mb-2">
+                  [ JUMLAH SLOT FOTO ]:
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {[3, 4, 6].map((count) => (
@@ -195,20 +200,20 @@ export default function CustomFramePage() {
                       key={count}
                       type="button"
                       onClick={() => setPhotoCount(count)}
-                      className={`py-2 px-3 rounded-full font-bold text-sm border-2 transition-all ${
+                      className={`py-2 px-3 rounded-xl font-mono font-bold text-xs uppercase border-2 transition-all ${
                         photoCount === count
-                          ? 'bg-[#00327d] text-white border-[#00327d] shadow-hard-blue-sm'
-                          : 'bg-white text-[#434653] border-[#c3c6d5] hover:border-[#00327d]'
+                          ? 'bg-[#3E4095] text-white border-[#1F1A17] shadow-brutal-sm'
+                          : 'bg-white text-[#1F1A17] border-[#1F1A17] hover:bg-[#F5F19A]'
                       }`}
                     >
-                      {count} Foto
+                      {count} FOTO
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="text-xs text-[#737784] font-medium text-center">
-                Dimensi: {frameDimensions?.width} x {frameDimensions?.height} px
+              <div className="text-xs font-mono font-bold text-[#737784] text-center">
+                DIMENSI: {frameDimensions?.width} x {frameDimensions?.height} PX
               </div>
             </div>
 
@@ -226,26 +231,28 @@ export default function CustomFramePage() {
               <Button
                 variant="primary"
                 onClick={handleUseFrame}
-                className="flex-1"
+                className="flex-1 shadow-brutal"
               >
                 <Check className="w-4 h-4" />
-                Gunakan Frame
+                <span>Gunakan Frame</span>
               </Button>
             </div>
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-8 mb-6">
           <Button
             variant="ghost"
             onClick={() => router.push('/frames')}
-            className="text-sm"
+            className="text-xs font-mono font-bold"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
-            Kembali ke Pilihan Frame
+            <span>Kembali Ke Pilihan Frame</span>
           </Button>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

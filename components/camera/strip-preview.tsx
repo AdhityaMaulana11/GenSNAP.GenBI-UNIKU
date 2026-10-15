@@ -5,9 +5,16 @@ import Image from 'next/image';
 import { ImageIcon, Check, RefreshCw } from 'lucide-react';
 import { FrameConfig } from '@/types/photobooth';
 
+export interface PhotoItem {
+  index?: number;
+  slotIndex?: number;
+  dataUrl?: string;
+  stillDataUrl?: string;
+}
+
 export interface StripPreviewProps {
   frame: FrameConfig;
-  photos: (any | null)[];
+  photos: (PhotoItem | null)[];
   currentPhotoIndex: number;
   onSelectSlot?: (index: number) => void;
   onReset?: () => void;
@@ -15,7 +22,7 @@ export interface StripPreviewProps {
 }
 
 /** Helper to extract image URL from CapturedPhoto, LivePhotoSlot, or plain object */
-function getPhotoDataUrl(photo: any): string | null {
+function getPhotoDataUrl(photo: PhotoItem | null | undefined): string | null {
   if (!photo) return null;
   return photo.dataUrl || photo.stillDataUrl || null;
 }
@@ -33,13 +40,13 @@ export function StripPreview({
 
   return (
     <>
-      {/* ── Mobile Horizontal Strip Preview (< md) ───────────────────────── */}
-      <div className="flex md:hidden flex-col items-center gap-2 p-2.5 sm:p-3 rounded-2xl bg-white border-2 border-[#00327d] shadow-hard-blue-sm w-full max-w-[440px] shrink-0">
+      {/* Mobile Horizontal Strip Preview (< md) */}
+      <div className="flex md:hidden flex-col items-center gap-2 p-2.5 sm:p-3 rounded-2xl bg-white border-3 border-[#1F1A17] shadow-brutal w-full max-w-[440px] shrink-0">
         <div className="w-full flex items-center justify-between px-1">
-          <span className="text-[11px] font-extrabold text-[#00327d] font-mono uppercase tracking-wider">
-            Strip Preview ({capturedCount}/{frame.photoCount})
+          <span className="text-[11px] font-extrabold text-[#1F1A17] font-mono uppercase tracking-wider">
+            STRIP PREVIEW ({capturedCount}/{frame.photoCount})
           </span>
-          <span className="text-[10px] font-bold text-[#00327d]/60 font-mono">
+          <span className="text-[10px] font-bold text-[#3E4095] font-mono">
             {frame.name}
           </span>
         </div>
@@ -59,10 +66,10 @@ export function StripPreview({
                 }}
                 className={`relative w-11 h-11 sm:w-13 sm:h-13 rounded-xl overflow-hidden border-2 flex items-center justify-center transition-all shrink-0 ${
                   dataUrl
-                    ? `border-[#00327d] bg-white shadow-sm ${isClickable ? 'cursor-pointer hover:scale-105' : ''}`
+                    ? `border-[#1F1A17] bg-white shadow-sm ${isClickable ? 'cursor-pointer hover:scale-105' : ''}`
                     : isNext
-                    ? 'border-[#fcd400] bg-[#fcd400]/20 animate-pulse ring-2 ring-[#00327d]'
-                    : 'border-dashed border-[#c3c6d5] bg-gray-50'
+                    ? 'border-[#1F1A17] bg-[#fcd400]/30 animate-pulse ring-2 ring-[#3E4095]'
+                    : 'border-dashed border-[#1F1A17]/30 bg-gray-50'
                 }`}
                 title={dataUrl ? (onSelectSlot ? `Klik untuk ulangi foto #${idx + 1}` : `Foto #${idx + 1}`) : `Slot #${idx + 1}`}
               >
@@ -74,20 +81,20 @@ export function StripPreview({
                       alt={`Foto ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-[#00327d] text-white flex items-center justify-center">
+                    <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-[#3E4095] text-white flex items-center justify-center">
                       <Check className="w-2.5 h-2.5" />
                     </div>
                   </>
                 ) : (
-                  <ImageIcon className="w-4 h-4 text-[#c3c6d5]" />
+                  <ImageIcon className="w-4 h-4 text-[#737784]" />
                 )}
                 <div
                   className={`absolute bottom-0.5 left-0.5 px-1 rounded text-[9px] font-mono font-bold ${
                     dataUrl
-                      ? 'bg-[#00327d]/80 text-white'
+                      ? 'bg-[#1F1A17] text-white'
                       : isNext
-                      ? 'bg-[#fcd400] text-[#00327d] font-extrabold'
-                      : 'bg-black/10 text-[#737784]'
+                      ? 'bg-[#fcd400] text-[#1F1A17] font-extrabold'
+                      : 'bg-black/10 text-[#1F1A17]'
                   }`}
                 >
                   #{idx + 1}
@@ -99,7 +106,7 @@ export function StripPreview({
           {onReset && capturedCount > 0 && !isRecording && (
             <button
               onClick={onReset}
-              className="p-1.5 rounded-lg text-xs font-bold text-[#ba1a1a] hover:bg-red-50 flex items-center gap-1 transition-colors ml-1"
+              className="p-1.5 rounded-lg text-xs font-bold text-[#ED3237] hover:bg-red-50 flex items-center gap-1 transition-colors ml-1"
               title="Reset Sesi"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -108,19 +115,18 @@ export function StripPreview({
         </div>
       </div>
 
-      {/* ── Desktop Proportional Strip Preview (>= md) ──────────────────── */}
-      {/* Container height bounded so Frame 01 (vertical) and Frame 02 (grid) have identical height */}
-      <div className="hidden md:flex bg-white rounded-3xl p-4 sm:p-5 border-3 border-[#00327d] shadow-hard-blue flex-col items-center shrink-0">
+      {/* Desktop Proportional Strip Preview (>= md) */}
+      <div className="hidden md:flex bg-white rounded-3xl p-4 sm:p-5 border-3 border-[#1F1A17] shadow-brutal flex-col items-center shrink-0">
         {/* Card Header */}
-        <div className="w-full text-center pb-2.5 mb-3 border-b-2 border-[#00327d]/20">
-          <h4 className="font-extrabold text-xs sm:text-sm text-[#00327d] tracking-wider uppercase font-mono">
+        <div className="w-full text-center pb-2.5 mb-3 border-b-2 border-[#1F1A17]/20">
+          <h4 className="font-extrabold text-xs sm:text-sm text-[#1F1A17] tracking-wider uppercase font-mono">
             STRIP PREVIEW
           </h4>
         </div>
 
-        {/* Frame Outline Container — height matches CameraControls sidebar (~240px) */}
+        {/* Frame Outline Container */}
         <div
-          className={`relative rounded-2xl bg-[#f0eded] p-2 border-2 border-dashed border-[#00327d]/40 flex flex-col items-center h-[220px] sm:h-[240px] ${
+          className={`relative rounded-2xl bg-[#fcf9f8] p-2 border-2 border-dashed border-[#1F1A17]/40 flex flex-col items-center h-[220px] sm:h-[240px] ${
             isVertical ? 'aspect-[560/1600]' : 'aspect-[1067/1600]'
           }`}
         >
@@ -130,6 +136,7 @@ export function StripPreview({
               src={frame.imageSrc}
               alt="Frame ghost"
               fill
+              sizes="(max-width: 640px) 120px, 160px"
               className="object-contain"
             />
           </div>
@@ -158,10 +165,10 @@ export function StripPreview({
                     isVertical ? 'flex-1 min-h-0' : 'aspect-[4/3]'
                   } ${
                     dataUrl
-                      ? `border-2 border-[#00327d] bg-white shadow-sm ${isClickable ? 'cursor-pointer hover:scale-105' : ''}`
+                      ? `border-2 border-[#1F1A17] bg-white shadow-sm ${isClickable ? 'cursor-pointer hover:scale-105' : ''}`
                       : isNext
-                      ? 'border-2 border-dashed border-[#fcd400] bg-[#fcd400]/20 animate-pulse'
-                      : 'border-2 border-dashed border-[#c3c6d5] bg-white/70'
+                      ? 'border-2 border-dashed border-[#fcd400] bg-[#fcd400]/25 animate-pulse'
+                      : 'border-2 border-dashed border-[#1F1A17]/25 bg-white/70'
                   }`}
                   title={dataUrl ? (onSelectSlot ? `Klik untuk ulangi foto #${idx + 1}` : `Foto #${idx + 1}`) : `Slot #${idx + 1}`}
                 >
@@ -173,17 +180,17 @@ export function StripPreview({
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <ImageIcon className="w-5 h-5 text-[#c3c6d5]" />
+                    <ImageIcon className="w-5 h-5 text-[#737784]" />
                   )}
 
                   {/* Number Badge */}
                   <div
-                    className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${
+                    className={`absolute top-1 right-1 w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-mono font-bold border border-[#1F1A17] ${
                       dataUrl
-                        ? 'bg-[#00327d] text-white'
+                        ? 'bg-[#3E4095] text-white'
                         : isNext
-                        ? 'bg-[#fcd400] text-[#00327d] font-extrabold ring-2 ring-[#00327d]'
-                        : 'bg-[#e5e2e1] text-[#737784]'
+                        ? 'bg-[#fcd400] text-[#1F1A17] font-extrabold'
+                        : 'bg-[#e5e2e1] text-[#1F1A17]'
                     }`}
                   >
                     {idx + 1}
@@ -198,7 +205,7 @@ export function StripPreview({
         {onReset && capturedCount > 0 && !isRecording && (
           <button
             onClick={onReset}
-            className="mt-3 p-1.5 px-3 rounded-lg text-xs font-bold text-[#ba1a1a] hover:bg-red-50 flex items-center gap-1 transition-colors border border-[#ba1a1a]/20"
+            className="mt-3 p-1.5 px-3 rounded-lg text-xs font-mono font-bold text-[#ED3237] hover:bg-red-50 flex items-center gap-1 transition-colors border-2 border-[#ED3237] shadow-brutal-sm cursor-pointer"
             title="Reset Sesi"
           >
             <RefreshCw className="w-3.5 h-3.5" />

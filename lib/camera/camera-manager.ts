@@ -67,7 +67,7 @@ export class CameraManager {
     if (!this.stream) return false;
     const track = this.stream.getVideoTracks()[0];
     if (!track || typeof track.getCapabilities !== 'function') return false;
-    const capabilities = track.getCapabilities() as any;
+    const capabilities = track.getCapabilities() as MediaTrackCapabilities & { torch?: boolean };
     return Boolean(capabilities && capabilities.torch);
   }
 
@@ -77,10 +77,10 @@ export class CameraManager {
     if (!track) return false;
 
     try {
-      const capabilities = (typeof track.getCapabilities === 'function' ? track.getCapabilities() : {}) as any;
+      const capabilities = (typeof track.getCapabilities === 'function' ? track.getCapabilities() : {}) as MediaTrackCapabilities & { torch?: boolean };
       if (capabilities && 'torch' in capabilities) {
         await track.applyConstraints({
-          advanced: [{ torch: enabled } as any],
+          advanced: [{ torch: enabled } as MediaTrackConstraintSet & { torch?: boolean }],
         });
         return true;
       }

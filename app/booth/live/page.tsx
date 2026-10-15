@@ -60,12 +60,12 @@ export default function LivePhotoBoothPage() {
     if (stage !== 'capturing') return;
 
     let isMounted = true;
-    setIsCameraReady(false);
 
     const cameraManager = new CameraManager();
     cameraManagerRef.current = cameraManager;
 
     async function initCamera() {
+      setIsCameraReady(false);
       try {
         setErrorType(null);
         const stream = await cameraManager.startCamera(facing);
@@ -317,7 +317,7 @@ export default function LivePhotoBoothPage() {
   // ── Error ───────────────────────────────────────────────────────────────────
   if (errorType) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#fcf9f8]">
+      <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8]">
         <main className="flex-1 flex items-center justify-center p-6">
           <ErrorState
             type={errorType}
@@ -349,17 +349,17 @@ export default function LivePhotoBoothPage() {
   // ── Stage: PREVIEW ──────────────────────────────────────────────────────────
   if (stage === 'preview') {
     return (
-      <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative overflow-x-hidden select-none bg-dot-pattern-blue">
+      <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] relative overflow-x-hidden select-none bg-dot-pattern-blue">
         <BoothHeader
           backHref="/frames"
-          badgeIcon={<Sparkles className="w-4 h-4 text-[#00327d]" />}
+          badgeIcon={<Sparkles className="w-4 h-4 text-[#3E4095]" />}
           badgeLabel="Pratinjau Live Photo"
         />
 
         <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 md:px-8 py-5 sm:py-10 flex flex-col items-center">
           <div className="text-center mb-5 sm:mb-8">
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#00327d] tracking-tight font-['var(--font-bricolage)']">
-              Pratinjau Live Photo
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#1F1A17] tracking-tight font-['var(--font-bricolage)']">
+              PRATINJAU LIVE PHOTO
             </h1>
             <p className="text-xs sm:text-sm text-[#434653] font-medium mt-1.5 px-2">
               Klik foto untuk memutar motion. Ulangi foto yang kurang pas, lalu cetak.
@@ -403,7 +403,7 @@ export default function LivePhotoBoothPage() {
               isLoading={isProcessingFinal}
               className="w-full sm:flex-1 py-3 sm:py-3.5 text-sm sm:text-base"
             >
-              <Sparkles className="w-5 h-5 text-[#00327d]" />
+              <Sparkles className="w-5 h-5 text-[#3E4095]" />
               Cetak
             </Button>
           </div>
@@ -416,14 +416,14 @@ export default function LivePhotoBoothPage() {
   const isRingLightActive = facing === 'user' && ringLightConfig.enabled;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] relative overflow-x-hidden select-none bg-dot-pattern-blue">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] relative overflow-x-hidden select-none bg-dot-pattern-blue">
       {/* Screen Ring Light Ambient Edge Illumination */}
       <RingLightOverlay config={ringLightConfig} />
 
       <BoothHeader
         backHref="/frames"
         onBack={() => retakingSlotIndex !== null && handleCancelRetakeSlot()}
-        badgeIcon={<Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00327d]" />}
+        badgeIcon={<Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#3E4095]" />}
         badgeLabel={
           retakingSlotIndex !== null
             ? `Ulangi Live #${retakingSlotIndex + 1}`
@@ -450,11 +450,11 @@ export default function LivePhotoBoothPage() {
           {/* Viewfinder */}
           <div className="order-1 md:order-2 flex flex-col items-center w-full max-w-[440px] lg:max-w-[560px] xl:max-w-2xl">
             <div
-              className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-black border-3 sm:border-4 shadow-hard-blue transition-all duration-300 z-10"
+              className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-black border-4 shadow-brutal-lg transition-all duration-300 z-10"
               style={{
-                borderColor: isRingLightActive ? ringLightConfig.color : '#00327d',
+                borderColor: isRingLightActive ? ringLightConfig.color : '#1F1A17',
                 boxShadow: isRingLightActive
-                  ? `0 0 24px ${ringLightConfig.color}80, 4px 4px 0px 0px #00327d`
+                  ? `0 0 24px ${ringLightConfig.color}80, 4px 4px 0px 0px #1F1A17`
                   : undefined,
               }}
             >
@@ -478,7 +478,7 @@ export default function LivePhotoBoothPage() {
               )}
 
               {/* Status badge */}
-              <div className="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-20 flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-[#00327d] text-[#fcd400] font-mono font-extrabold text-[10px] sm:text-xs border-2 border-[#fcd400] shadow-hard-gold-sm">
+              <div className="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1F1A17] text-[#fcd400] font-mono font-extrabold text-[10px] sm:text-xs border-2 border-[#fcd400] shadow-brutal-sm">
                 {isRecording ? (
                   <>
                     <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-500 animate-ping" />
@@ -500,8 +500,8 @@ export default function LivePhotoBoothPage() {
               {/* Active Ring Light Status Pill */}
               {isRingLightActive && (
                 <div
-                  className="absolute top-2.5 sm:top-4 right-2.5 sm:right-4 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-mono font-extrabold border-2 border-[#00327d] shadow-sm select-none"
-                  style={{ backgroundColor: ringLightConfig.color, color: '#00327d' }}
+                  className="absolute top-2.5 sm:top-4 right-2.5 sm:right-4 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-mono font-extrabold border-2 border-[#3E4095] shadow-sm select-none"
+                  style={{ backgroundColor: ringLightConfig.color, color: '#3E4095' }}
                 >
                   <Sparkles className="w-3 h-3 fill-current animate-spin" />
                   <span>RING {ringLightConfig.brightness}%</span>
@@ -520,7 +520,7 @@ export default function LivePhotoBoothPage() {
               />
 
               <div className="flex items-center gap-2">
-                <p className="text-xs sm:text-sm font-bold text-[#00327d] text-center px-2">
+                <p className="text-xs sm:text-sm font-bold text-[#3E4095] text-center px-2">
                   {isRecording
                     ? 'Tahan posemu sejenak, motion sedang direkam...'
                     : retakingSlotIndex !== null
@@ -531,7 +531,7 @@ export default function LivePhotoBoothPage() {
                   <button
                     type="button"
                     onClick={handleCancelRetakeSlot}
-                    className="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-[#00327d] font-bold text-xs flex items-center gap-1 border border-[#00327d]/30"
+                    className="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-[#3E4095] font-bold text-xs flex items-center gap-1 border border-[#3E4095]/30"
                   >
                     Batal
                   </button>
@@ -543,7 +543,7 @@ export default function LivePhotoBoothPage() {
                 <button
                   type="button"
                   onClick={() => setStage('preview')}
-                  className="mt-1 flex items-center gap-2 px-4 py-2 rounded-full bg-[#00327d] text-white font-extrabold text-xs sm:text-sm border-2 border-[#00327d] shadow-hard-blue-sm hover:bg-[#00327d]/90 transition-all hover:scale-105 active:scale-95"
+                  className="mt-1 flex items-center gap-2 px-4 py-2 rounded-full bg-[#3E4095] text-white font-extrabold text-xs sm:text-sm border-2 border-[#3E4095] shadow-hard-blue-sm hover:bg-[#3E4095]/90 transition-all hover:scale-105 active:scale-95"
                 >
                   <span>Lanjut ke Pratinjau</span>
                   <ArrowRight className="w-4 h-4" />
@@ -607,10 +607,10 @@ function PreviewSlotCard({ slot, idx, onRetake }: PreviewSlotCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border-2 sm:border-[3px] border-[#00327d] shadow-hard-blue flex flex-col items-center">
+    <div className="bg-white rounded-3xl p-3.5 sm:p-5 border-3 border-[#1F1A17] shadow-brutal flex flex-col items-center">
       {/* Label row */}
       <div className="w-full flex items-center justify-between mb-2">
-        <span className="font-extrabold text-xs sm:text-sm text-[#00327d] uppercase tracking-wider font-mono">
+        <span className="font-extrabold text-xs sm:text-sm text-[#1F1A17] uppercase tracking-wider font-mono">
           Live #{idx + 1}
         </span>
         <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
@@ -619,10 +619,10 @@ function PreviewSlotCard({ slot, idx, onRetake }: PreviewSlotCardProps) {
         </span>
       </div>
 
-      {/* Clickable media preview — shows still, plays motion on click */}
+      {/* Clickable media preview: shows still, plays motion on click */}
       <div
         onClick={togglePlay}
-        className="relative w-full aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-black border-2 border-[#00327d]/20 cursor-pointer mb-2.5 group"
+        className="relative w-full aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-black border-2 border-[#3E4095]/20 cursor-pointer mb-2.5 group"
       >
         {/* Still base */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -645,7 +645,7 @@ function PreviewSlotCard({ slot, idx, onRetake }: PreviewSlotCardProps) {
 
         {/* Play / Pause overlay */}
         <div className={`absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors`}>
-          <div className={`w-9 h-9 rounded-full bg-[#00327d]/85 text-[#fcd400] flex items-center justify-center transition-opacity ${isPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+          <div className={`w-9 h-9 rounded-full bg-[#3E4095]/85 text-[#fcd400] flex items-center justify-center transition-opacity ${isPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
             {isPlaying
               ? <Pause className="w-4 h-4 fill-current" />
               : <Play className="w-4 h-4 fill-current ml-0.5" />
@@ -654,8 +654,8 @@ function PreviewSlotCard({ slot, idx, onRetake }: PreviewSlotCardProps) {
         </div>
 
         {/* LIVE badge */}
-        <div className="absolute bottom-1.5 left-1.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#fcd400] text-[#00327d] font-mono font-extrabold text-[9px] sm:text-[10px] border border-[#00327d]">
-          <span className={`w-1.5 h-1.5 rounded-full bg-[#00327d] ${isPlaying ? 'animate-ping' : ''}`} />
+        <div className="absolute bottom-1.5 left-1.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#fcd400] text-[#3E4095] font-mono font-extrabold text-[9px] sm:text-[10px] border border-[#3E4095]">
+          <span className={`w-1.5 h-1.5 rounded-full bg-[#3E4095] ${isPlaying ? 'animate-ping' : ''}`} />
           LIVE
         </div>
       </div>

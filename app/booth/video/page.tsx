@@ -145,7 +145,7 @@ export default function VideoBoothPage() {
 
   if (errorType) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#fcf9f8]">
+      <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8]">
         <main className="flex-1 flex items-center justify-center p-6">
           <ErrorState
             type={errorType}
@@ -161,10 +161,10 @@ export default function VideoBoothPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] bg-dot-pattern select-none overflow-x-hidden">
+    <div className="min-h-[100dvh] flex flex-col bg-[#fcf9f8] bg-dot-pattern select-none overflow-x-hidden">
       <BoothHeader
         backHref="/mode"
-        badgeIcon={<Video className="w-4 h-4 text-[#00327d]" />}
+        badgeIcon={<Video className="w-4 h-4 text-[#3E4095]" />}
         badgeLabel="Video Booth (Maks. 15d)"
       />
 
@@ -175,7 +175,7 @@ export default function VideoBoothPage() {
             <div className="flex flex-col items-center shrink-0">
               <div
                 onClick={toggleResultPlayback}
-                className="relative w-[300px] sm:w-[380px] md:w-[420px] lg:w-[460px] aspect-[4/3] rounded-3xl overflow-hidden bg-black border-4 border-[#00327d] shadow-hard-blue cursor-pointer group"
+                className="relative w-[300px] sm:w-[380px] md:w-[420px] lg:w-[460px] aspect-[4/3] rounded-3xl overflow-hidden bg-black border-4 border-[#1F1A17] shadow-brutal-lg cursor-pointer group"
               >
                 <video
                   ref={playbackRef}
@@ -186,7 +186,7 @@ export default function VideoBoothPage() {
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#00327d]/90 text-[#fcd400] border-2 border-[#fcd400] flex items-center justify-center shadow-hard-blue-sm">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#3E4095] text-[#fcd400] border-2 border-[#1F1A17] flex items-center justify-center shadow-brutal-sm">
                     {isPlayingResult ? (
                       <Pause className="w-7 h-7 sm:w-8 sm:h-8 fill-current" />
                     ) : (
@@ -195,14 +195,14 @@ export default function VideoBoothPage() {
                   </div>
                 </div>
 
-                <div className="absolute bottom-3 inset-x-0 text-center text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Klik untuk memutar video
+                <div className="absolute bottom-3 inset-x-0 text-center text-xs font-mono font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                  KLIK UNTUK MEMUTAR VIDEO
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col items-stretch gap-4 w-full max-w-sm">
-              <div className="bg-white rounded-3xl p-5 sm:p-6 border-3 border-[#00327d] shadow-hard-blue flex flex-col gap-3">
+              <div className="bg-white rounded-3xl p-5 sm:p-6 border-3 border-[#1F1A17] shadow-brutal flex flex-col gap-3">
                 <Button
                   variant="primary"
                   size="lg"
@@ -245,7 +245,7 @@ export default function VideoBoothPage() {
         ) : (
           /* Live Recording Screen */
           <div className="flex flex-col items-center w-full max-w-[480px] md:max-w-[540px] lg:max-w-2xl">
-            <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black border-4 border-[#00327d] shadow-hard-blue flex items-center justify-center">
+            <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-black border-4 border-[#1F1A17] shadow-brutal-lg flex items-center justify-center">
               <video
                 ref={videoPreviewRef}
                 autoPlay
@@ -258,12 +258,12 @@ export default function VideoBoothPage() {
 
               {/* Recording Status & Timer */}
               {isRecording ? (
-                <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ba1a1a] text-white font-mono font-bold text-xs border-2 border-white shadow-hard-dark animate-pulse">
+                <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#ED3237] text-white font-mono font-bold text-xs border-2 border-[#1F1A17] shadow-brutal-sm animate-pulse">
                   <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping" />
                   <span>REC {elapsedSec}s / {MAX_VIDEO_DURATION_SEC}s</span>
                 </div>
               ) : (
-                <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00327d] text-[#fcd400] font-mono font-extrabold text-[11px] sm:text-xs border-2 border-[#fcd400] shadow-hard-gold-sm">
+                <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1F1A17] text-[#fcd400] font-mono font-extrabold text-[11px] sm:text-xs border-2 border-[#fcd400] shadow-brutal-sm">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#fcd400]" />
                   <span>● VIDEO READY</span>
                 </div>
@@ -277,7 +277,7 @@ export default function VideoBoothPage() {
                   type="button"
                   onClick={handleStopRecording}
                   aria-label="Stop Recording"
-                  className="flex items-center justify-center w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-[#ba1a1a] border-4 border-[#00327d] shadow-hard-blue hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
+                  className="flex items-center justify-center w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-[#ED3237] border-4 border-[#1F1A17] shadow-brutal hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer"
                 >
                   <Square className="w-7 h-7 sm:w-8 sm:h-8 text-white fill-current" />
                 </button>
@@ -287,15 +287,15 @@ export default function VideoBoothPage() {
                   disabled={!isCameraReady}
                   onClick={handleStartRecording}
                   aria-label="Start Recording"
-                  className="group relative flex items-center justify-center w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-[#fcd400] border-4 border-[#00327d] shadow-hard-blue hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer disabled:opacity-50"
+                  className="group relative flex items-center justify-center w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-[#fcd400] border-4 border-[#1F1A17] shadow-brutal hover:scale-105 active:scale-95 transition-all duration-150 cursor-pointer disabled:opacity-50"
                 >
-                  <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#ba1a1a] flex items-center justify-center text-white">
+                  <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#ED3237] border-2 border-[#1F1A17] flex items-center justify-center text-white">
                     <Video className="w-6 h-6 sm:w-7 sm:h-7" />
                   </div>
                 </button>
               )}
 
-              <p className="text-xs sm:text-sm font-bold text-[#00327d] text-center">
+              <p className="text-xs sm:text-sm font-mono font-bold text-[#1F1A17] text-center">
                 {isRecording
                   ? `Merekam... Klik tombol untuk berhenti (Maks. ${MAX_VIDEO_DURATION_SEC} detik)`
                   : 'Klik tombol merah untuk mulai merekam video'}

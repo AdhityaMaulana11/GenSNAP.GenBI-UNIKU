@@ -26,28 +26,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-bold tracking-tight rounded-full transition-all duration-150 select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none';
+      'inline-flex items-center justify-center font-extrabold uppercase tracking-wide rounded-xl sm:rounded-2xl transition-all duration-150 select-none cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#3E4095] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none active-brutal';
 
     const variants = {
       primary:
-        'bg-[#00327d] text-white hover:bg-[#002660] shadow-hard-blue active-press',
+        'bg-[#3E4095] text-white border-3 border-[#1F1A17] shadow-brutal hover:bg-[#34367f] hover:-translate-y-0.5',
       secondary:
-        'bg-[#e5e2e1] text-[#1c1b1b] hover:bg-[#dcd9d9] active-press-gold',
+        'bg-white text-[#1F1A17] border-3 border-[#1F1A17] shadow-brutal hover:bg-[#F5F19A] hover:-translate-y-0.5',
       gold:
-        'bg-[#fcd400] text-[#1c1b1b] hover:bg-[#e9c400] shadow-hard-gold active-press-gold',
+        'bg-[#fcd400] text-[#1F1A17] border-3 border-[#1F1A17] shadow-brutal hover:bg-[#ebd500] hover:-translate-y-0.5',
       outline:
-        'border-2 border-[#00327d] bg-transparent text-[#00327d] hover:bg-[#00327d]/5 active-press',
+        'border-3 border-[#1F1A17] bg-white text-[#1F1A17] shadow-brutal-sm hover:bg-[#1F1A17] hover:text-white hover:-translate-y-0.5',
       ghost:
-        'bg-transparent text-[#1c1b1b] hover:bg-[#00327d]/5 active:scale-95',
+        'bg-transparent text-[#1F1A17] hover:bg-[#1F1A17]/10 active:scale-95 border-0 shadow-none',
       danger:
-        'bg-[#ba1a1a] text-white hover:bg-[#93000a] shadow-hard-dark active:translate-y-0.5',
+        'bg-[#ED3237] text-white border-3 border-[#1F1A17] shadow-brutal hover:bg-[#d6282d] hover:-translate-y-0.5',
     };
 
     const sizes = {
-      sm: 'text-xs px-4 py-2 min-h-[36px] gap-1.5',
-      md: 'text-sm sm:text-base px-6 py-3 min-h-[48px] gap-2',
-      lg: 'text-base sm:text-lg px-8 py-4 min-h-[56px] gap-2.5',
-      icon: 'w-12 h-12 p-0 rounded-full',
+      sm: 'text-xs px-4 py-2 min-h-[38px] gap-1.5',
+      md: 'text-xs sm:text-sm px-6 py-3 min-h-[48px] gap-2 font-mono',
+      lg: 'text-sm sm:text-base px-8 py-4 min-h-[56px] gap-2.5 font-mono',
+      icon: 'w-12 h-12 p-0 rounded-xl border-3 border-[#1F1A17] shadow-brutal-sm',
     };
 
     return (
@@ -58,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading ? (
-          <span className="inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
         ) : null}
         {children}
       </button>
