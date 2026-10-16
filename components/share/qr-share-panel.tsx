@@ -40,7 +40,12 @@ export function QRSharePanel({ photoBlob, siteUrl }: QRSharePanelProps) {
         if (!res.ok) throw new Error('upload failed');
         const { token } = await res.json() as { token: string };
 
-        const base = siteUrl ?? window.location.origin;
+        // Selalu pakai NEXT_PUBLIC_SITE_URL (production URL) supaya QR tidak
+        // pernah ngarah ke preview deployment Vercel yang butuh login.
+        const base =
+          siteUrl ??
+          process.env.NEXT_PUBLIC_SITE_URL ??
+          window.location.origin;
         const url = `${base}/d/${token}`;
 
         if (cancelled) return;
