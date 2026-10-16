@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { usePhotoboothSession } from '@/lib/session/session-context';
 import { downloadPNG, downloadJPG, shareImage } from '@/lib/export/export-manager';
+import { QRSharePanel } from '@/components/share/qr-share-panel';
 
 export default function ExportResultPage() {
   const router = useRouter();
@@ -179,6 +180,15 @@ export default function ExportResultPage() {
             </Button>
 
             <div className="w-full h-0.5 bg-[#1F1A17]/20 my-1 sm:my-2" />
+
+            {/* QR Code Download Section */}
+            {finalBlob && (
+              <div className="w-full bg-white border-3 border-[#1F1A17] rounded-2xl p-4 shadow-brutal-sm">
+                <QRSharePanel photoBlob={finalBlob} />
+              </div>
+            )}
+
+            <div className="w-full h-0.5 bg-[#1F1A17]/20 my-1" />
 
             {/* Retake & Create Another Side by Side */}
             <div className="grid grid-cols-2 gap-3 w-full">
